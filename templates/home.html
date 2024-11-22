@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Accueil - Gestion Hôtels{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1>Bienvenue sur la plateforme de Gestion d'Hôtels</h1>
+    <p>Découvrez nos fonctionnalités pour gérer vos réservations et chambres facilement.</p>
+    <a href="{{ url_for('reservations') }}" class="btn btn-primary">Voir les réservations</a>
+</div>
+{% endblock %}

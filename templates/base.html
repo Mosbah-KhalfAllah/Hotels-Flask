@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gestion d'Hôtels{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.6.22/css/uikit.min.css" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background: linear-gradient(90deg, #FF5733, #FFC300);">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand fw-bold" href="{{ url_for('home') }}" style="color: white; font-size: 2rem;">Gestion Hôtels</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('home') %}active{% endif %}" href="{{ url_for('home') }}">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('reservations') %}active{% endif %}" href="{{ url_for('reservations') }}">Réservations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('chambres') %}active{% endif %}" href="{{ url_for('chambres') }}">Chambres</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('employes') %}active{% endif %}" href="{{ url_for('employes') }}">Employés</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('paiement') %}active{% endif %}" href="{{ url_for('paiement') }}">Paiement</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('hotels') %}active{% endif %}" href="{{ url_for('hotels') }}">Hôtels</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="d-flex align-items-center">
+                <form class="d-flex me-3" role="search">
+                    <div class="search-bar me-3">
+                        <input type="search" placeholder="Recherche..." aria-label="Recherche">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </form>
+                {% if session.get('nom') and session.get('prenom') %}
+                    <a href="{{ url_for('profil') }}" class="nav-link text-white ms-3" uk-tooltip="title: Mon Profil; pos: bottom">
+                        <i class="fas fa-user fa-lg"></i>
+                    </a>
+                    <span class="text-white ms-3 user-name">
+                        {{ session['prenom'] }} {{ session['nom'] }}
+                    </span>
+                    <a href="{{ url_for('logout') }}" class="nav-link text-white ms-3" uk-tooltip="title: Déconnexion; pos: bottom">
+                        <i class="fas fa-sign-out-alt fa-lg"></i>
+                    </a>
+                {% else %}
+                    <a class="nav-link text-white ms-3" uk-toggle="target: #modal-close-default" uk-tooltip="title: Se connecter ou s'inscrire; pos: bottom">
+                        <i class="fas fa-user fa-lg"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+        
+
+<div class="container mt-5 pt-5">
+    {% block content %}{% endblock %}
+</div>
+
+
+<div id="modal-close-default" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        
+        <div id="signup-form">
+            <h2 class="text-center mb-4">Inscription</h2>
+            <form action="{{ url_for('register') }}" method="POST" onsubmit="return validateSignupForm()">
+                <div class="mb-3">
+                    <label for="prenom" class="form-label">Prénom</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" class="form-control" name="prenom" id="prenom" placeholder="Entrez votre prénom" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="nom" class="form-label">Nom</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" class="form-control" name="nom" id="nom" placeholder="Entrez votre nom" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="tel" class="form-label">Téléphone</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        <input type="tel" class="form-control" name="tel" id="tel" placeholder="Entrez votre numéro de téléphone" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="date_naissance" class="form-label">Date de Naissance</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                        <input type="date" class="form-control" name="date_naissance" id="date_naissance" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Sexe</label>
+                    <div class="d-flex">
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="radio" name="sexe" id="homme" value="homme" checked>
+                            <label class="form-check-label" for="homme">
+                                <div class="sex-option">
+                                    <i class="fas fa-male"></i> Homme
+                                </div>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="sexe" id="femme" value="femme">
+                            <label class="form-check-label" for="femme">
+                                <div class="sex-option">
+                                    <i class="fas fa-female"></i> Femme
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="adresse" class="form-label">Adresse</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                        <input type="text" class="form-control" name="adresse" id="adresse" placeholder="Entrez votre adresse" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Entrez votre email" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="motdepasse" class="form-label">Mot de passe</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control" name="motdepasse" id="motdepasse" placeholder="Entrez votre mot de passe" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="confmotdepasse" class="form-label">Confirmer le mot de passe</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control" name="confmotdepasse" id="confmotdepasse" placeholder="Confirmez votre mot de passe" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <button type="button" class="btn btn-primary w-100" onclick="toggleForms()">Passer à la connexion</button>
+            </div>
+        </div>
+
+        <!-- Formulaire de connexion -->
+        <div id="login-form" style="display: none;">
+            <h2 class="text-center mb-4">Connexion</h2>
+            <form action="{{ url_for('login') }}" method="POST">
+                <div class="mb-3">
+                    <label for="emailLogin" class="form-label">Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" class="form-control" name="email" id="emailLogin" placeholder="Entrez votre email" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="motdepasseLogin" class="form-label">Mot de passe</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control" name="motdepasse" id="motdepasseLogin" placeholder="Entrez votre mot de passe" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <button type="button" class="btn btn-primary w-100" onclick="toggleForms()">Passer à l'inscription</button>
+            </div>
+        </div>
+
+        <script>
+            function toggleForms() {
+                const signupForm = document.getElementById('signup-form');
+                const loginForm = document.getElementById('login-form');
+                signupForm.style.display = signupForm.style.display === 'none' ? 'block' : 'none';
+                loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
+            }
+
+            function validateSignupForm() {
+                const motdepasse = document.getElementById('motdepasse').value;
+                const confmotdepasse = document.getElementById('confmotdepasse').value;
+
+                if (motdepasse !== confmotdepasse) {
+                    alert("Les mots de passe ne correspondent pas.");
+                    return false;
+                }
+                return true;
+            }
+        </script>
+    </div>
+</div>
+
+<footer class="bg-info text-white text-center text-lg-start mt-5 pt-4 pb-2">
+    <div class="container">
+        <p class="mb-1">&copy; 2024 Gestion d'Hôtels. Tous droits réservés.</p>
+        <div class="d-flex justify-content-center mb-2">
+            <a href="#" class="footer-link me-3">Facebook</a>
+            <a href="#" class="footer-link me-3">Twitter</a>
+            <a href="#" class="footer-link">Instagram</a>
+        </div>
+        <p class="mb-0">Contactez-nous : <a href="mailto:contact@gestionhotels.com" class="text-white">contact@gestionhotels.com</a></p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.6.22/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.6.22/js/uikit-icons.min.js"></script>
+</body>
+</html>

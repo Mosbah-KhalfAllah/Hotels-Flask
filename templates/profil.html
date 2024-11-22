@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow">
+                <div class="card-header text-center bg-info text-white">
+                    <h2>Mon Profil</h2>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <img src="https://via.placeholder.com/150" alt="Avatar" class="rounded-circle" />
+                        <h5 class="mt-3">{{ user.prenom }} {{ user.nom }}</h5>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+                        <li class="list-group-item"><strong>Téléphone:</strong> {{ user.tel }}</li>
+                        <li class="list-group-item"><strong>Date de naissance:</strong> {{ user.date_naissance }}</li>
+                        <li class="list-group-item"><strong>Sexe:</strong> {{ user.sexe }}</li>
+                        <li class="list-group-item"><strong>Adresse:</strong> {{ user.adresse }}</li>
+                    </ul>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{{ url_for('edit_profile') }}" class="btn btn-primary">Modifier le Profil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

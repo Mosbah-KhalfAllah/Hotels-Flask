@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="text-center">Modifier mon Profil</h1>
+            <div class="card shadow">
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="nom" class="form-label">Nom</label>
+                            <input type="text" class="form-control" id="nom" name="nom" value="{{ user.nom }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="prenom" class="form-label">Prénom</label>
+                            <input type="text" class="form-control" id="prenom" name="prenom" value="{{ user.prenom }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tel" class="form-label">Téléphone</label>
+                            <input type="tel" class="form-control" id="tel" name="tel" value="{{ user.tel }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="date_naissance" class="form-label">Date de Naissance</label>
+                            <input type="date" class="form-control" id="date_naissance" name="date_naissance" value="{{ user.date_naissance.strftime('%Y-%m-%d') }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sexe" class="form-label">Sexe</label>
+                            <select class="form-select" id="sexe" name="sexe" required>
+                                <option value="Homme" {% if user.sexe == 'Homme' %}selected{% endif %}>Homme</option>
+                                <option value="Femme" {% if user.sexe == 'Femme' %}selected{% endif %}>Femme</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="adresse" class="form-label">Adresse</label>
+                            <input type="text" class="form-control" id="adresse" name="adresse" value="{{ user.adresse }}" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Enregistrer les Modifications</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
