@@ -1,10 +1,41 @@
 {% extends 'base.html' %}
 
-{% block title %}Hôtels - Gestion Hôtels{% endblock %}
+{% block title %}
+Hotels - Gestion Hôtels
+{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Gestion Multi-Hôtels</h2>
-    <p>Gérez plusieurs établissements depuis un tableau de bord centralisé.</p>
+<div class="container-fluid p-0">
+    <h1 class="text-center fw-bold" style="color: #ff5722; font-size: 2.5rem; letter-spacing: 1.5px; margin-top: 20px;">Nos Hôtels</h1>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for hotel in hotels %}
+        <div class="col p-0">
+            <div class="card h-100 shadow-lg border-0 rounded-3">
+                {% if hotel.image_url %}
+                <img src="{{ hotel.image_url }}" class="card-img-top" alt="Image de {{ hotel.nom }}" style="object-fit: cover; height: 250px;">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/default-hotel.jpg') }}" class="card-img-top" alt="Image de {{ hotel.nom }}" style="object-fit: cover; height: 250px;">
+                {% endif %}
+                <div class="card-body p-4">
+                    <h5 class="card-title text-dark fw-bold" style="font-size: 1.5rem;">{{ hotel.nom }}</h5>
+                    <p class="mb-1"><i class="fas fa-map-marker-alt text-primary me-2"></i>{{ hotel.adresse }}, {{ hotel.ville }}</p>
+                    <p class="mb-1"><i class="fas fa-phone-alt text-success me-2"></i>{{ hotel.telephone }}</p>
+                    <p class="mb-2">
+                        <i class="fas fa-star text-warning me-2"></i>
+                        {% for i in range(hotel.etoiles) %}★{% endfor %}
+                    </p>
+                    {% if hotel.description %}
+                    <p class="text-muted small">{{ hotel.description }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer p-2 bg-light border-0 text-center">
+                    <button class="btn btn-warning btn-sm px-4" style="font-size: 1rem; border-radius: 25px;">En savoir plus</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
+
 {% endblock %}

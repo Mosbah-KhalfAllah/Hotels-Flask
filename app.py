@@ -26,11 +26,52 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.nom} {self.prenom}>'
+    
+class Chambre(db.Model):
+    __tablename__ = 'chambre'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    numero = db.Column(db.String(50), nullable=False)
+    prix = db.Column(db.Float, nullable=False)
+    position = db.Column(db.String(100), nullable=True)
+    disponible = db.Column(db.Boolean, default=True, nullable=False)
+    type = db.Column(db.String(50), nullable=False)
+    capacite = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.Text, nullable=True)
+
+
+    def __repr__(self):
+        return f'<Chambre {self.numero} - {self.prix}€>'
+    
+class Reservation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
+    check_in = db.Column(db.Date, nullable=False)
+    check_out = db.Column(db.Date, nullable=False)
+    room_type = db.Column(db.Enum('suite', 'deluxe', 'standard'), nullable=False)
+    adults = db.Column(db.Integer, nullable=False)
+    children = db.Column(db.Integer, default=0)
+    special_requests = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 @app.route('/')
 @app.route('/home')
 def home():
     return render_template('home.html')
+
+@app.route('/adminDashboard')
+def adminDashboard():
+    if 'user_id' in session and session.get('role') == 'admin':
+        admin = User.query.filter_by(id=session['user_id']).first()
+        rooms = Chambre.query.all()
+        users = User.query.all()
+        reservations = Reservation.query.all() 
+        return render_template('adminDashboard.html', reservations=reservations, users=users, rooms=rooms, admin=admin)
+    else:
+        flash("Accès non autorisé.", "danger")
+        return redirect(url_for('home'))
+
 
 @app.route('/profil')
 def profil():
@@ -41,33 +82,136 @@ def profil():
         flash('Veuillez vous connecter pour accéder à votre profil.', 'warning')
         return redirect(url_for('login'))
 
-@app.route('/services')
-def services():
-    return render_template('services.html')
-
-@app.route('/reservations')
+@app.route('/reservations', methods=['GET', 'POST'])
 def reservations():
-    return render_template('reservations.html')
+    if request.method == 'POST':
+        full_name = request.form['full_name']
+        email = request.form['email']
+        check_in = request.form['check_in']
+        check_out = request.form['check_out']
+        room_type = request.form['room_type']
+        adults = request.form['adults']
+        children = request.form['children']
+        special_requests = request.form['special_requests']
+
+        reservation = Reservation(full_name=full_name, email=email, check_in=check_in,
+                                  check_out=check_out, room_type=room_type, adults=adults,
+                                  children=children, special_requests=special_requests)
+        db.session.add(reservation)
+        db.session.commit()
+        flash('Réservation ajoutée avec succès!', 'success')
+
+        return redirect(url_for('reservations'))
+
+    # Query all reservations from the database
+    reservations_list = Reservation.query.all()
+    return render_template('reservations.html', reservations=reservations_list)
+
+@app.route('/add_reservation', methods=['GET', 'POST'])
+def add_reservation():
+    if request.method == 'POST':
+        full_name = request.form['full_name']
+        email = request.form['email']
+        check_in = request.form['check_in']
+        check_out = request.form['check_out']
+        room_type = request.form['room_type']
+        adults = request.form['adults']
+        children = request.form['children']
+        special_requests = request.form['special_requests']
+
+        reservation = Reservation(full_name=full_name, email=email, check_in=check_in,
+                                  check_out=check_out, room_type=room_type, adults=adults,
+                                  children=children, special_requests=special_requests)
+        db.session.add(reservation)
+        db.session.commit()
+
+        return redirect(url_for('reservations'))
+
+    return render_template('add_reservation.html')  # Assurez-vous d'avoir un template 'add_reservation.html'
+
+@app.route('/edit_reservation/<int:id>', methods=['GET', 'POST'])
+def edit_reservation(id):
+    reservation = Reservation.query.get_or_404(id)  # Récupérer la réservation par ID
+    
+    if request.method == 'POST':
+        # Mettre à jour les données de la réservation
+        reservation.nom = request.form['nom']
+        reservation.date_arrivee = request.form['date_arrivee']
+        reservation.date_depart = request.form['date_depart']
+        reservation.chambre = request.form['chambre']
+        
+        # Sauvegarder les modifications
+        db.session.commit()
+        return redirect(url_for('adminDashboard'))  # Rediriger vers le tableau de bord de l'administrateur
+
+    return render_template('edit_reservation.html', reservation=reservation)
+
+@app.route('/delete_reservation/<int:id>', methods=['POST'])
+def delete_reservation(id):
+    reservation = Reservation.query.get_or_404(id)
+    db.session.delete(reservation)
+    db.session.commit()
+    return redirect(url_for('adminDashboard'))
 
 @app.route('/chambres')
 def chambres():
     return render_template('chambres.html')
 
-@app.route('/employes')
-def employes():
-    if 'user_id' in session and session.get('role') == 'admin':
-        return render_template('employes.html')
-    else:
-        flash("Accès non autorisé.", "danger")
-        return redirect(url_for('home'))
+@app.route('/add_room', methods=['GET', 'POST'])
+def add_room():
+    if request.method == 'POST':
+        # Récupérer les données du formulaire
+        numero = request.form['room_number']
+        prix = float(request.form['room_price'])
+        position = request.form['room_position']
+        disponible = True if request.form['availability'] == 'true' else False
+        type_chambre = request.form['room_type']
+        capacite = int(request.form['room_capacity'])
+        description = request.form['room_description']
+        
+        # Créer une nouvelle instance de Chambre
+        nouvelle_chambre = Chambre(
+            numero=numero,
+            prix=prix,
+            position=position,
+            disponible=disponible,
+            type=type_chambre,
+            capacite=capacite,
+            description=description
+        )
 
-@app.route('/paiement')
-def paiement():
-    return render_template('paiement.html')
+        # Ajouter à la session et valider l'ajout
+        db.session.add(nouvelle_chambre)
+        db.session.commit()
 
-@app.route('/hotels')
-def hotels():
-    return render_template('hotels.html')
+    return render_template('add_room.html')
+
+@app.route('/edit_room/<int:id>', methods=['GET', 'POST'])
+def edit_room(id):
+    room = Chambre.query.get_or_404(id)
+    
+    if request.method == 'POST':
+        room.nom = request.form['nom']
+        room.type = request.form['type']
+        room.capacite = request.form['capacite']
+        room.prix = request.form['prix']
+        room.description = request.form['description']
+        db.session.commit()
+        return redirect(url_for('adminDashboard'))
+
+    return render_template('edit_room.html', room=room)
+
+@app.route('/delete_room/<int:id>', methods=['POST'])
+def delete_room(id):
+    room_to_delete = Chambre.query.get(id)
+    if room_to_delete:
+        db.session.delete(room_to_delete)
+        db.session.commit()
+    return redirect(url_for('adminDashboard'))
+
+@app.route('/apropos')
+def apropos():
+    return render_template('apropos.html')
 
 @app.route('/users')
 def users():
@@ -122,22 +266,10 @@ def delete_user(id):
         db.session.delete(user)
         db.session.commit()
         flash("Utilisateur supprimé avec succès", "danger")
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('adminDashboard'))
     else:
         flash("Accès non autorisé.", "danger")
         return redirect(url_for('home'))
-
-
-@app.route('/admin_dashboard')
-def admin_dashboard():
-    if 'user_id' in session and session.get('role') == 'admin':
-        admin = User.query.filter_by(id=session['user_id']).first()
-        users = User.query.all()
-        return render_template('adminDashboard.html', users=users, admin=admin)
-    else:
-        flash("Accès non autorisé.", "danger")
-        return redirect(url_for('home'))
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -155,7 +287,7 @@ def login():
             flash('Connexion réussie!', 'success')
             
             if user.role == 'admin':
-                return redirect(url_for('admin_dashboard'))
+                return redirect(url_for('adminDashboard'))
             else:
                 return redirect(url_for('home'))
         else:

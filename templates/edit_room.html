@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier une Chambre</title>
+    <link href="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/css/uikit.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(10deg, #8e2de2, #4a00e0);
+            color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .uk-container {
+            max-width: 700px;
+            background: #2c2c54;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        h1.uk-text-primary {
+            color: #00aaff;
+            font-weight: 700;
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+
+        .uk-input, .uk-select {
+            background: #1e3a66;
+            border: none;
+            border-radius: 8px;
+            color: #f5f5f5;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .uk-input:focus, .uk-select:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.7);
+        }
+
+        .uk-button-primary {
+            background: #00aaff;
+            border: none;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0, 170, 255, 0.5);
+        }
+
+        .uk-button-primary:hover {
+            background: #008ecc;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 170, 255, 0.7);
+        }
+
+        .uk-form-label {
+            font-weight: 500;
+            color: #a3d4ff;
+        }
+
+        label span {
+            margin-right: 10px;
+        }
+
+        .uk-margin-bottom {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="uk-container">
+        <h1 class="uk-text-primary">
+            <span uk-icon="icon: home; ratio: 1.8"></span>
+            Modifier une Chambre
+        </h1>
+
+        <form method="POST">
+            <div class="uk-margin uk-margin-bottom">
+                <label for="room_name" class="uk-form-label">
+                    <span uk-icon="icon: home; ratio: 1.2"></span> Nom de la Chambre
+                </label>
+                <input type="text" id="room_name" name="room_name" class="uk-input" value="{{ room.room_name }}" required>
+            </div>
+            <div class="uk-margin uk-margin-bottom">
+                <label for="room_type" class="uk-form-label">
+                    <span uk-icon="icon: tag; ratio: 1.2"></span> Type de Chambre
+                </label>
+                <select id="room_type" name="room_type" class="uk-select" required>
+                    <option value="Single" {% if room.room_type == 'Single' %}selected{% endif %}>Single</option>
+                    <option value="Double" {% if room.room_type == 'Double' %}selected{% endif %}>Double</option>
+                    <option value="Suite" {% if room.room_type == 'Suite' %}selected{% endif %}>Suite</option>
+                </select>
+            </div>
+            <div class="uk-margin uk-margin-bottom">
+                <label for="room_price" class="uk-form-label">
+                    <span uk-icon="icon: money; ratio: 1.2"></span> Prix
+                </label>
+                <input type="number" id="room_price" name="room_price" class="uk-input" value="{{ room.room_price }}" required>
+            </div>
+            <div class="uk-margin uk-margin-bottom">
+                <label for="room_capacity" class="uk-form-label">
+                    <span uk-icon="icon: users; ratio: 1.2"></span> Capacité
+                </label>
+                <input type="number" id="room_capacity" name="room_capacity" class="uk-input" value="{{ room.room_capacity }}" required>
+            </div>
+            <div class="uk-margin uk-margin-bottom">
+                <label for="room_availability" class="uk-form-label">
+                    <span uk-icon="icon: check; ratio: 1.2"></span> Disponibilité
+                </label>
+                <select id="room_availability" name="room_availability" class="uk-select" required>
+                    <option value="Disponible" {% if room.room_availability == 'Disponible' %}selected{% endif %}>Disponible</option>
+                    <option value="Indisponible" {% if room.room_availability == 'Indisponible' %}selected{% endif %}>Indisponible</option>
+                </select>
+            </div>
+            <button type="submit" class="uk-button uk-button-primary uk-width-1-1">
+                <span uk-icon="icon: check; ratio: 1.2"></span> Mettre à jour
+            </button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit-icons.min.js"></script>
+</body>
+</html>

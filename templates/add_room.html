@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Ajouter une Chambre - Burj Al Arab{% endblock %}
+
+{% block content %}
+<!-- Add Room Section -->
+<div class="add-room-section py-5" style="background-color: #f1f1f1;">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-4" style="color: #ff6347;">
+            <i class="fas fa-bed"></i> Ajouter une Chambre
+        </h2>
+        <p class="text-center mb-5" style="font-size: 1.2rem;">Remplissez le formulaire ci-dessous pour ajouter une nouvelle chambre à notre hôtel et offrir une expérience exceptionnelle à nos clients.</p>
+
+        <!-- Add Room Form -->
+        <form method="POST" action="{{ url_for('add_room') }}">
+            <!-- Room Number and Price -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="room_number" class="form-label"><i class="fas fa-hashtag"></i> Numéro de Chambre</label>
+                    <input type="text" class="form-control" id="room_number" name="room_number" required placeholder="Entrez le numéro de la chambre">
+                </div>
+                <div class="col-md-6">
+                    <label for="room_price" class="form-label"><i class="fas fa-credit-card"></i> Prix</label>
+                    <input type="number" class="form-control" id="room_price" name="room_price" required placeholder="Entrez le prix de la chambre">
+                </div>
+            </div>
+
+            <!-- Room Type and Availability -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="room_type" class="form-label"><i class="fas fa-bed"></i> Type de Chambre</label>
+                    <select class="form-select" id="room_type" name="room_type" required>
+                        <option value="suite">Suite Royale</option>
+                        <option value="deluxe">Chambre Deluxe</option>
+                        <option value="standard">Chambre Standard</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="availability" class="form-label"><i class="fas fa-check-circle"></i> Disponibilité</label>
+                    <select class="form-select" id="availability" name="availability" required>
+                        <option value="true">Disponible</option>
+                        <option value="false">Indisponible</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Room Capacity and Position -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="room_capacity" class="form-label"><i class="fas fa-users"></i> Capacité</label>
+                    <input type="number" class="form-control" id="room_capacity" name="room_capacity" required placeholder="Nombre maximum de personnes">
+                </div>
+                <div class="col-md-6">
+                    <label for="room_position" class="form-label"><i class="fas fa-location-arrow"></i> Position</label>
+                    <input type="text" class="form-control" id="room_position" name="room_position" placeholder="Emplacement de la chambre (ex: étage 2)">
+                </div>
+            </div>
+
+            <!-- Caractéristiques Spéciales and Description (side by side) -->
+            <div class="row mb-3">
+                <!-- Caractéristiques Spéciales -->
+                <div class="col-md-6">
+                    <label for="special_features" class="form-label"><i class="fas fa-gift"></i> Caractéristiques Spéciales</label>
+                    <textarea class="form-control" id="special_features" name="special_features" rows="4" placeholder="Exemples: vue sur la mer, jacuzzi"></textarea>
+                </div>
+                <!-- Description -->
+                <div class="col-md-6">
+                    <label for="room_description" class="form-label"><i class="fas fa-info-circle"></i> Description</label>
+                    <textarea class="form-control" id="room_description" name="room_description" rows="4" placeholder="Ajoutez une description de la chambre"></textarea>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger btn-lg">
+                    <i class="fas fa-check-circle"></i> Ajouter la Chambre
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

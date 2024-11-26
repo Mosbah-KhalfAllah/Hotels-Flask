@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier la réservation</title>
+    <link href="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/css/uikit.min.css" rel="stylesheet" />
+</head>
+<body>
+
+<div class="uk-container uk-margin-top">
+    <h2>Modifier la réservation de {{ reservation.nom }}</h2>
+
+    <form action="{{ url_for('edit_reservation', id=reservation.id) }}" method="POST">
+        <div class="uk-margin">
+            <label class="uk-form-label" for="nom">Nom du client</label>
+            <input class="uk-input" type="text" id="nom" name="nom" value="{{ reservation.nom }}" required>
+        </div>
+
+        <div class="uk-margin">
+            <label class="uk-form-label" for="date_arrivee">Date d'arrivée</label>
+            <input class="uk-input" type="text" id="date_arrivee" name="date_arrivee" value="{{ reservation.date_arrivee }}" required>
+        </div>
+
+        <div class="uk-margin">
+            <label class="uk-form-label" for="date_depart">Date de départ</label>
+            <input class="uk-input" type="text" id="date_depart" name="date_depart" value="{{ reservation.date_depart }}" required>
+        </div>
+
+        <div class="uk-margin">
+            <label class="uk-form-label" for="chambre">Numéro de chambre</label>
+            <input class="uk-input" type="text" id="chambre" name="chambre" value="{{ reservation.chambre }}" required>
+        </div>
+
+        <button class="uk-button uk-button-primary uk-button-large" type="submit">Mettre à jour</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit-icons.min.js"></script>
+</body>
+</html>

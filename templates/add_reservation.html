@@ -1,0 +1,33 @@
+<!-- add_reservation.html -->
+{% extends 'base.html' %}
+
+{% block title %}Ajouter une Réservation{% endblock %}
+
+{% block content %}
+    <h2>Ajouter une Réservation</h2>
+    <form action="{{ url_for('add_reservation') }}" method="POST">
+        <div class="uk-margin">
+            <label for="client_name" class="uk-form-label">Nom du Client</label>
+            <input class="uk-input" type="text" id="client_name" name="client_name" required>
+        </div>
+
+        <div class="uk-margin">
+            <label for="room_number" class="uk-form-label">Numéro de Chambre</label>
+            <input class="uk-input" type="text" id="room_number" name="room_number" required>
+        </div>
+
+        <div class="uk-margin">
+            <label for="check_in" class="uk-form-label">Date d'Arrivée</label>
+            <input class="uk-input" type="date" id="check_in" name="check_in" required>
+        </div>
+
+        <div class="uk-margin">
+            <label for="check_out" class="uk-form-label">Date de Départ</label>
+            <input class="uk-input" type="date" id="check_out" name="check_out" required>
+        </div>
+
+        <div class="uk-margin">
+            <button class="uk-button uk-button-primary" type="submit">Ajouter la Réservation</button>
+        </div>
+    </form>
+{% endblock %}

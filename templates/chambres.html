@@ -1,11 +1,115 @@
 {% extends 'base.html' %}
 
-{% block title %}Chambres - Gestion Hôtels{% endblock %}
+{% block title %}Chambres Disponibles - Burj Al Arab{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Gestion des Chambres</h2>
-    <p>Ajouter, modifier et supprimer les chambres.</p>
-    <!-- Ajoutez ici une interface pour gérer les chambres -->
+<!-- Chambres Section -->
+<div class="chambres-section py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5" style="color: #ff7043;">
+            Nos Chambres Disponibles
+        </h2>
+
+        <!-- Section Filtres -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <select class="form-select" aria-label="Filtrer par type de chambre">
+                    <option selected>Filtrer par type de chambre</option>
+                    <option value="1">Suite Royale</option>
+                    <option value="2">Chambre Deluxe</option>
+                    <option value="3">Chambre Standard</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="number" class="form-control" placeholder="Prix max (€)" aria-label="Prix max">
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-danger w-100">Appliquer les filtres</button>
+            </div>
+        </div>
+
+        <!-- Chambres disponibles -->
+        <div class="row">
+
+            <!-- Chambre 1 - Suite Royale -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm rounded" style="border: 1px solid #f5a623; transition: transform 0.3s ease;">
+                    <img src="https://via.placeholder.com/350x200/ff7043/ffffff?text=Suite+Royale" class="card-img-top" alt="Suite Royale">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: #f57c00;">Suite Royale</h5>
+                        <p class="card-text" style="color: #6c757d;">
+                            Profitez d'une expérience inégalée avec notre suite royale, offrant une vue spectaculaire et des services personnalisés.
+                        </p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-bed"></i> 1 Lit King Size</li>
+                            <li><i class="fas fa-bath"></i> Salle de bain privée avec jacuzzi</li>
+                            <li><i class="fas fa-tv"></i> TV à écran plat</li>
+                        </ul>
+                        <a href="{{ url_for('reservations') }}" class="btn btn-warning w-100">Réserver maintenant</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chambre 2 - Chambre Deluxe -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm rounded" style="border: 1px solid #f5a623; transition: transform 0.3s ease;">
+                    <img src="https://via.placeholder.com/350x200/ff7043/ffffff?text=Chambre+Deluxe" class="card-img-top" alt="Chambre Deluxe">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: #f57c00;">Chambre Deluxe</h5>
+                        <p class="card-text" style="color: #6c757d;">
+                            Découvrez le confort ultime avec notre chambre deluxe, idéale pour un séjour agréable et reposant.
+                        </p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-bed"></i> Lit Queen Size</li>
+                            <li><i class="fas fa-shower"></i> Douche à l'italienne</li>
+                            <li><i class="fas fa-wifi"></i> Wi-Fi haut débit</li>
+                        </ul>
+                        <a href="{{ url_for('reservations') }}" class="btn btn-warning w-100">Réserver maintenant</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chambre 3 - Chambre Standard -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm rounded" style="border: 1px solid #f5a623; transition: transform 0.3s ease;">
+                    <img src="https://via.placeholder.com/350x200/ff7043/ffffff?text=Chambre+Standard" class="card-img-top" alt="Chambre Standard">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: #f57c00;">Chambre Standard</h5>
+                        <p class="card-text" style="color: #6c757d;">
+                            Un choix parfait pour un séjour confortable et abordable avec toutes les commodités essentielles.
+                        </p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-bed"></i> Lit Double</li>
+                            <li><i class="fas fa-tv"></i> TV à écran plat</li>
+                            <li><i class="fas fa-coffee"></i> Machine à café</li>
+                        </ul>
+                        <a href="{{ url_for('reservations') }}" class="btn btn-warning w-100">Réserver maintenant</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
+<style>
+    .card:hover {
+    transform: scale(1.05);  /* Légère augmentation à l'agrandissement de la carte */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.card-body ul li i {
+    color: #f57c00; /* Icones orange pour plus de contraste */
+}
+
+.btn-warning {
+    background-color: #f57c00;
+    border-color: #f57c00;
+}
+
+.btn-warning:hover {
+    background-color: #f57c00;
+    border-color: #f57c00;
+}
+
+</style>
 {% endblock %}

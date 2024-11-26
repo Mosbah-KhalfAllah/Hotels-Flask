@@ -1,10 +1,85 @@
 {% extends 'base.html' %}
 
-{% block title %}Reservation - Gestion Hôtels{% endblock %}
+{% block title %}Réservation - Burj Al Arab{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Gestion des Reservations</h2>
-    <!-- Ajoutez ici une interface pour gérer les chambres -->
+<!-- Reservation Section -->
+<div class="reservation-section py-5" style="background-color: #f1f1f1;">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-4" style="color: #ff6347;">
+            <i class="fas fa-bed"></i> Réservez Votre Séjour
+        </h2>
+        <p class="text-center mb-5" style="font-size: 1.2rem;">Remplissez le formulaire ci-dessous pour réserver une chambre et vivre une expérience inoubliable au Burj Al Arab.</p>
+
+        <!-- Reservation Form -->
+        <form method="POST" action="{{ url_for('reservations') }}">
+            <!-- Full Name -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="full_name" class="form-label"><i class="fas fa-user"></i> Nom Complet</label>
+                    <input type="text" class="form-control" id="full_name" name="full_name" required placeholder="Entrez votre nom complet" aria-label="Nom Complet">
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required placeholder="Entrez votre email" aria-label="Email">
+                </div>
+            </div>
+
+            <!-- Dates -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="check_in" class="form-label"><i class="fas fa-calendar-alt"></i> Date d'Arrivée</label>
+                    <input type="date" class="form-control" id="check_in" name="check_in" required aria-label="Date d'Arrivée">
+                </div>
+                <div class="col-md-6">
+                    <label for="check_out" class="form-label"><i class="fas fa-calendar-alt"></i> Date de Départ</label>
+                    <input type="date" class="form-control" id="check_out" name="check_out" required aria-label="Date de Départ">
+                </div>
+            </div>
+
+            <!-- Chambre Type -->
+            <div class="mb-3">
+                <label for="room_type" class="form-label"><i class="fas fa-bed"></i> Type de Chambre</label>
+                <select class="form-select" id="room_type" name="room_type" required aria-label="Type de Chambre">
+                    <option value="suite">Suite Royale</option>
+                    <option value="deluxe">Chambre Deluxe</option>
+                    <option value="standard">Chambre Standard</option>
+                </select>
+            </div>
+
+            <!-- Number of Guests -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="adults" class="form-label"><i class="fas fa-users"></i> Nombre d'Adultes</label>
+                    <input type="number" class="form-control" id="adults" name="adults" required min="1" max="10" placeholder="Nombre d'adultes" aria-label="Nombre d'Adultes">
+                </div>
+                <div class="col-md-6">
+                    <label for="children" class="form-label"><i class="fas fa-child"></i> Nombre d'Enfants</label>
+                    <input type="number" class="form-control" id="children" name="children" min="0" max="5" placeholder="Nombre d'enfants" aria-label="Nombre d'Enfants">
+                </div>
+            </div>
+
+            <!-- Special Requests -->
+            <div class="mb-3">
+                <label for="special_requests" class="form-label"><i class="fas fa-gift"></i> Demandes Spéciales</label>
+                <textarea class="form-control" id="special_requests" name="special_requests" rows="4" placeholder="Exemples: lit bébé, chambre non-fumeur" aria-label="Demandes Spéciales"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger btn-lg">
+                    <i class="fas fa-check-circle"></i> Réserver Maintenant
+                </button>
+            </div>
+        </form>
+
+        <!-- Success Message (optional) -->
+        {% if success %}
+            <div class="alert alert-success mt-4">
+                <strong>Réservation réussie!</strong> Vous recevrez bientôt un email de confirmation.
+            </div>
+        {% endif %}
+    </div>
 </div>
+
 {% endblock %}

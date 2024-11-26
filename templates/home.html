@@ -1,11 +1,190 @@
 {% extends 'base.html' %}
 
-{% block title %}Accueil - Gestion Hôtels{% endblock %}
+{% block title %}Accueil - Burj Al Arab{% endblock %}
 
 {% block content %}
-<div class="text-center">
-    <h1>Bienvenue sur la plateforme de Gestion d'Hôtels</h1>
-    <p>Découvrez nos fonctionnalités pour gérer vos réservations et chambres facilement.</p>
-    <a href="{{ url_for('reservations') }}" class="btn btn-primary">Voir les réservations</a>
+<!-- Hero Section -->
+<div class="hero-section text-center text-white py-5" style="background: linear-gradient(45deg, #ff8c00, #ff6347);">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Bienvenue au Burj Al Arab</h1>
+        <p class="lead mt-3">Vivez une expérience inoubliable au sommet du luxe et de l'élégance.</p>
+        <a href="{{ url_for('reservations') }}" class="btn btn-light btn-lg mt-4 shadow">Réservez votre séjour</a>
+    </div>
 </div>
+
+<!-- About Section -->
+<div class="about-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <img src="{{ url_for('static', filename='images/home-1.jpg') }}" alt="Image Hôtel" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-md-6">
+                <h2 class="fw-bold mb-3" style="color: #ff6347;">À propos de nous</h2>
+                <p class="text-muted">
+                    Situé au cœur de Dubaï, le Burj Al Arab est bien plus qu'un hôtel. C'est une icône de luxe et de raffinement. Découvrez un service exclusif, des vues spectaculaires, et un hébergement qui redéfinit le confort.
+                </p>
+                <a href="{{ url_for('apropos') }}" class="btn btn-outline-danger mt-3">En savoir plus</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Services Section -->
+<div class="services-section py-5 text-white" style="background-color: #ff8c00;">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Nos Services</h2>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <i class="fas fa-swimmer fa-3x mb-3"></i>
+                <h5 class="fw-bold">Piscine</h5>
+                <p>Profitez de notre piscine à débordement avec vue panoramique sur le golfe.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-utensils fa-3x mb-3"></i>
+                <h5 class="fw-bold">Restaurants</h5>
+                <p>Des plats gastronomiques servis dans des cadres somptueux.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-spa fa-3x mb-3"></i>
+                <h5 class="fw-bold">Spa & Bien-être</h5>
+                <p>Des soins exclusifs pour une relaxation totale.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gallery Section -->
+<div class="gallery-section py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5" style="color: #ff6347;">Galerie</h2>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='images/g-1.jpg') }}" class="img-fluid rounded shadow" alt="Photo 1">
+            </div>
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='images/g-2.jpg') }}" class="img-fluid rounded shadow" alt="Photo 2">
+            </div>
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='images/g-3.jpg') }}" class="img-fluid rounded shadow" alt="Photo 3">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Testimonials Section -->
+<div class="testimonials-section py-5 text-white" style="background: linear-gradient(135deg, #ff6347, #ff8c00);">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Ce que disent nos clients</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card bg-light text-dark shadow">
+                    <div class="card-body">
+                        <p class="card-text">"Un séjour incroyable ! Le service est impeccable et la vue est à couper le souffle."</p>
+                        <h6 class="fw-bold">- Sophie L.</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-light text-dark shadow">
+                    <div class="card-body">
+                        <p class="card-text">"Le spa est fantastique et les restaurants sont exceptionnels. Une expérience inoubliable."</p>
+                        <h6 class="fw-bold">- Ahmed K.</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-light text-dark shadow">
+                    <div class="card-body">
+                        <p class="card-text">"Luxe et confort au rendez-vous. Nous reviendrons sans hésiter !"</p>
+                        <h6 class="fw-bold">- Maria G.</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="faq-section py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5" style="color: #ff6347;">Questions Fréquentes</h2>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faqOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                        Quels sont les horaires d'enregistrement ?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        L'enregistrement est disponible à partir de 15h et le départ doit être effectué avant 11h.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faqTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                        Le petit-déjeuner est-il inclus ?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Oui, un petit-déjeuner buffet est inclus dans la plupart des offres.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="contact-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5" style="color: #ff6347;">Contactez-nous</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1717.3011104375385!2d55.18570599999999!3d25.1410479!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6a576414cf2d%3A0xb3da71b879f0e038!2sBurj-al-Arab!5e1!3m2!1sfr!2stn!4v1732633609320!5m2!1sfr!2stn" 
+                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+            <div class="col-md-6">
+                <form>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nom complet</label>
+                        <input type="text" class="form-control" id="name" placeholder="Votre nom">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Votre email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" rows="4" placeholder="Votre message"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Envoyer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .gallery-section img:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+    }
+
+    .testimonials-section .card {
+        border-radius: 10px;
+    }
+
+    .faq-section .accordion-button {
+        background-color: #ff8c00;
+        color: white;
+    }
+
+    .faq-section .accordion-button:not(.collapsed) {
+        background-color: #ff6347;
+        color: white;
+    }
+</style>
 {% endblock %}
