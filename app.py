@@ -26,7 +26,7 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.nom} {self.prenom}>'
-    
+
 class Chambre(db.Model):
     __tablename__ = 'chambre'
 
@@ -38,7 +38,6 @@ class Chambre(db.Model):
     type = db.Column(db.String(50), nullable=False)
     capacite = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text, nullable=True)
-
 
     def __repr__(self):
         return f'<Chambre {self.numero} - {self.prix}€>'
@@ -55,9 +54,47 @@ class Reservation(db.Model):
     special_requests = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
+class Contact(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nom_complet = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    date_reception = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    def __repr__(self):
+        return f'<Contact {self.nom_complet} - {self.email}>'
+
 @app.route('/')
 @app.route('/home')
 def home():
+    return render_template('home.html')
+
+
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        # Récupération des données
+        nom_complet = request.form.get('nom_complet')
+        email = request.form.get('email')
+        message = request.form.get('message')
+
+        # Vérification des données
+        if not nom_complet or not email or not message:
+            flash("Tous les champs sont obligatoires.", "danger")
+            return redirect('/home')
+
+        # Enregistrer ou traiter les données
+        try:
+            nouveau_message = Contact(nom_complet=nom_complet, email=email, message=message)
+            db.session.add(nouveau_message)
+            db.session.commit()
+            flash("Votre message a été envoyé avec succès.", "success")
+            return redirect('/')
+        except Exception as e:
+            db.session.rollback()
+            flash("Une erreur est survenue.", "danger")
+            print(e)
+
     return render_template('home.html')
 
 @app.route('/adminDashboard')
@@ -103,7 +140,6 @@ def reservations():
 
         return redirect(url_for('reservations'))
 
-    # Query all reservations from the database
     reservations_list = Reservation.query.all()
     return render_template('reservations.html', reservations=reservations_list)
 
@@ -127,22 +163,20 @@ def add_reservation():
 
         return redirect(url_for('reservations'))
 
-    return render_template('add_reservation.html')  # Assurez-vous d'avoir un template 'add_reservation.html'
+    return render_template('add_reservation.html')
 
 @app.route('/edit_reservation/<int:id>', methods=['GET', 'POST'])
 def edit_reservation(id):
-    reservation = Reservation.query.get_or_404(id)  # Récupérer la réservation par ID
+    reservation = Reservation.query.get_or_404(id)
     
     if request.method == 'POST':
-        # Mettre à jour les données de la réservation
         reservation.nom = request.form['nom']
         reservation.date_arrivee = request.form['date_arrivee']
         reservation.date_depart = request.form['date_depart']
         reservation.chambre = request.form['chambre']
         
-        # Sauvegarder les modifications
         db.session.commit()
-        return redirect(url_for('adminDashboard'))  # Rediriger vers le tableau de bord de l'administrateur
+        return redirect(url_for('adminDashboard'))
 
     return render_template('edit_reservation.html', reservation=reservation)
 
@@ -155,12 +189,19 @@ def delete_reservation(id):
 
 @app.route('/chambres')
 def chambres():
-    return render_template('chambres.html')
+    chambres = Chambre.query.all()
+    chambres_par_categorie = {}
+    
+    for chambre in chambres:
+        if chambre.type not in chambres_par_categorie:
+            chambres_par_categorie[chambre.type] = []
+        chambres_par_categorie[chambre.type].append(chambre)
+    
+    return render_template('chambres.html', chambres_par_categorie=chambres_par_categorie)
 
 @app.route('/add_room', methods=['GET', 'POST'])
 def add_room():
     if request.method == 'POST':
-        # Récupérer les données du formulaire
         numero = request.form['room_number']
         prix = float(request.form['room_price'])
         position = request.form['room_position']
@@ -169,7 +210,6 @@ def add_room():
         capacite = int(request.form['room_capacity'])
         description = request.form['room_description']
         
-        # Créer une nouvelle instance de Chambre
         nouvelle_chambre = Chambre(
             numero=numero,
             prix=prix,
@@ -180,7 +220,6 @@ def add_room():
             description=description
         )
 
-        # Ajouter à la session et valider l'ajout
         db.session.add(nouvelle_chambre)
         db.session.commit()
 
@@ -222,42 +261,75 @@ def users():
         flash("Accès non autorisé.", "danger")
         return redirect(url_for('home'))
 
-@app.route('/users/create', methods=['GET', 'POST'])
-def create_user():
-    if 'user_id' in session and session.get('role') == 'admin':
-        if request.method == 'POST':
-            nom = request.form['nom']
-            prenom = request.form['prenom']
-            email = request.form['email']
-            tel = request.form['tel']
-            role = request.form['role']
-            new_user = User(nom=nom, prenom=prenom, email=email, tel=tel, role=role)
+@app.route('/add_user', methods=['GET', 'POST'])
+def add_user():
+    if request.method == 'POST':
+        # Traitement du formulaire (identique à avant)
+        nom = request.form['nom']
+        prenom = request.form['prenom']
+        email = request.form['email']
+        motdepasse = request.form['motdepasse']
+        tel = request.form['tel']
+        date_naissance = request.form['date_naissance']
+        sexe = request.form['sexe']
+        adresse = request.form['adresse']
+        role = request.form['role']
+
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('Cet email est déjà utilisé. Veuillez en choisir un autre.', 'danger')
+            return redirect(url_for('add_user'))
+
+        hashed_password = generate_password_hash(motdepasse, method='pbkdf2:sha256')
+
+        new_user = User(nom=nom, prenom=prenom, email=email, motdepasse=hashed_password,
+                        tel=tel, date_naissance=date_naissance, sexe=sexe,
+                        adresse=adresse, role=role)
+
+        try:
             db.session.add(new_user)
             db.session.commit()
-            flash("Utilisateur créé avec succès", "success")
-            return redirect(url_for('users'))
-        return render_template('create_user.html')
-    else:
-        flash("Accès non autorisé.", "danger")
-        return redirect(url_for('home'))
+            flash('Utilisateur ajouté avec succès.', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('Une erreur est survenue. Veuillez réessayer.', 'danger')
 
-@app.route('/users/edit/<int:id>', methods=['GET', 'POST'])
+        return redirect(url_for('adminDashboard'))
+    
+    return render_template('add_user.html')
+
+@app.route('/edit_user/<int:id>', methods=['GET', 'POST'])
 def edit_user(id):
-    if 'user_id' in session and session.get('role') == 'admin':
-        user = User.query.get(id)
-        if request.method == 'POST':
-            user.nom = request.form['nom']
-            user.prenom = request.form['prenom']
-            user.email = request.form['email']
-            user.tel = request.form['tel']
-            user.role = request.form['role']
+    user = User.query.get_or_404(id)
+
+    if request.method == 'POST':
+        user.nom = request.form['nom']
+        user.prenom = request.form['prenom']
+        user.email = request.form['email']
+        user.tel = request.form['tel']
+        user.date_naissance = request.form['date_naissance']
+        user.sexe = request.form['sexe']
+        user.adresse = request.form['adresse']
+        user.role = request.form['role']
+
+        if 'sexe' in request.form:
+            user.sexe = request.form['sexe']
+        else:
+            print("Se variable 'sexe' not found in form")
+        
+        if request.form['motdepasse']:
+            user.motdepasse = generate_password_hash(request.form['motdepasse'])
+
+        try:
             db.session.commit()
-            flash("Utilisateur mis à jour avec succès", "success")
-            return redirect(url_for('users'))
-        return render_template('edit_user.html', user=user)
-    else:
-        flash("Accès non autorisé.", "danger")
-        return redirect(url_for('home'))
+            flash("Utilisateur mis à jour avec succès!", "success")
+            return redirect(url_for('adminDashboard'))
+        except Exception as e:
+            db.session.rollback()
+            flash("Une erreur est survenue lors de la mise à jour.", "danger")
+            print(e)
+
+    return render_template('edit_user.html', user=user)
 
 @app.route('/users/delete/<int:id>', methods=['GET'])
 def delete_user(id):
@@ -294,7 +366,6 @@ def login():
             flash('Échec de la connexion. Vérifiez votre email et votre mot de passe.', 'danger')
     
     return render_template('home.html')
-
 
 @app.route('/logout')
 def logout():

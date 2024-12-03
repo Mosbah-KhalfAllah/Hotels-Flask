@@ -1,242 +1,249 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Dashboard</title>
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin - Dashboard</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/css/uikit.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+        <link href="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/css/uikit.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
 
-{% block content %}
-<div class="uk-flex">
-    <!-- Sidebar -->
-    <nav id="sidebar" class="uk-background-muted uk-light uk-width-1-4 uk-height-viewport uk-box-shadow-small">
-        <div class="uk-text-center uk-padding">
-            <h4 class="uk-text-bold uk-text-primary">Tableau de Bord</h4>
-        </div>
-        <ul class="uk-nav uk-nav-default uk-nav-center">
-            <li class="uk-nav-header uk-text-uppercase">Gestion</li>
-            <li>
-                <a href="#" id="users-link" class="sidebar-link">
-                    <i class="fas fa-user-cog fa-lg uk-margin-small-right"></i>
-                    Utilisateurs
+    {% block content %}
+    <div class="uk-flex">
+        <a href="{{ url_for('home') }}" class="uk-position-top-left uk-padding-small uk-text-primary">
+            <i class="fas fa-home fa-2x"></i>
+        </a>
+        <!-- Sidebar -->
+        <nav id="sidebar" class="uk-background-muted uk-light uk-width-1-4 uk-height-viewport uk-box-shadow-small">
+            <div class="uk-text-center uk-padding">
+                <h4 class="uk-text-bold uk-text-primary">Tableau de Bord</h4>
+            </div>
+            <ul class="uk-nav uk-nav-default uk-nav-center">
+                <li class="uk-nav-header uk-text-uppercase">Gestion</li>
+                <li>
+                    <a href="#" id="users-link" class="sidebar-link">
+                        <i class="fas fa-user-cog fa-lg uk-margin-small-right"></i>
+                        Utilisateurs
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="rooms-link" class="sidebar-link">
+                        <i class="fas fa-bed fa-lg uk-margin-small-right"></i>
+                        Chambres
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="reservations-link" class="sidebar-link">
+                        <i class="fas fa-calendar fa-lg uk-margin-small-right"></i>
+                        Réservations
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Contenu principal -->
+        <div id="content" class="uk-width-expand uk-padding uk-container">
+            <h1 class="uk-text-center uk-margin-bottom uk-text-lead uk-padding-small uk-border-rounded uk-background-gradient uk-box-shadow-large animated-title">
+                {% if admin %}
+                    Bienvenue, {{ admin.nom }} {{ admin.prenom }} dans votre Dashboard
+                {% else %}
+                    Bienvenue dans votre Dashboard
+                {% endif %}
+            </h1>
+
+            <!-- Gestion des utilisateurs -->
+            <div id="user-management" class="uk-hidden">
+                <h2 class="uk-text-bold uk-margin-bottom">Gestion des Utilisateurs</h2>
+                <table class="uk-table uk-table-divider uk-table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Date de naissance</th>
+                            <th>Sexe</th>
+                            <th>Adresse</th>
+                            <th>Rôle</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.nom }}</td>
+                            <td>{{ user.prenom }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.tel }}</td>
+                            <td>{{ user.date_naissance }}</td>
+                            <td>{{ user.sexe }}</td>
+                            <td>{{ user.adresse }}</td>
+                            <td>{{ user.role }}</td>
+                            <td>
+                                <a href="{{ url_for('edit_user', id=user.id) }}" class="uk-button uk-button-primary uk-button-small">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </a>
+                                <a href="{{ url_for('delete_user', id=user.id) }}" class="uk-button uk-button-danger uk-button-small" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                                    <i class="fas fa-trash-alt"></i> Supprimer
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{{ url_for('add_user') }}" class="uk-button uk-button-primary">
+                    <i class="fas fa-user-plus"></i> Ajouter un utilisateur
                 </a>
-            </li>
-            <li>
-                <a href="#" id="rooms-link" class="sidebar-link">
-                    <i class="fas fa-bed fa-lg uk-margin-small-right"></i>
-                    Chambres
+            </div>
+
+            <!-- Gestion des chambres -->
+            <div id="room-management" class="uk-hidden">
+                <h2 class="uk-text-bold uk-margin-bottom">Gestion des Chambres</h2>
+                <table class="uk-table uk-table-divider uk-table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Numéro</th>
+                            <th>Type</th>
+                            <th>Capacité</th>
+                            <th>Prix</th>
+                            <th>Position</th>
+                            <th>Disponible</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for room in rooms %}
+                        <tr>
+                            <td>{{ room.id }}</td>
+                            <td>{{ room.numero }}</td>
+                            <td>{{ room.type }}</td>
+                            <td>{{ room.capacite }}</td>
+                            <td>{{ room.prix }} €</td>
+                            <td>{{ room.position }}</td>
+                            <td>{{ 'Oui' if room.disponible else 'Non' }}</td>
+                            <td>{{ room.description }}</td>
+                            <td>
+                                <a href="{{ url_for('edit_room', id=room.id) }}" class="uk-button uk-button-primary uk-button-small">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </a>
+                                <a href="{{ url_for('delete_room', id=room.id) }}" class="uk-button uk-button-danger uk-button-small" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?');">
+                                    <i class="fas fa-trash-alt"></i> Supprimer
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{{ url_for('add_room') }}" class="uk-button uk-button-primary">
+                    <i class="fas fa-bed"></i> Ajouter une chambre
                 </a>
-            </li>
-            <li>
-                <a href="#" id="reservations-link" class="sidebar-link">
-                    <i class="fas fa-calendar fa-lg uk-margin-small-right"></i>
-                    Réservations
+            </div>
+
+            <!-- Gestion des réservations -->
+            <div id="reservation-management" class="uk-hidden">
+                <h2 class="uk-text-bold uk-margin-bottom">Gestion des Réservations</h2>
+                <table class="uk-table uk-table-divider uk-table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom Complet</th>
+                            <th>Email</th>
+                            <th>Chambre</th>
+                            <th>Date d'Arrivée</th>
+                            <th>Date de Départ</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reservation in reservations %}
+                        <tr>
+                            <td>{{ reservation.id }}</td>
+                            <td>{{ reservation.full_name }}</td>
+                            <td>{{ reservation.email }}</td>
+                            <td>{{ reservation.room_type }}</td>
+                            <td>{{ reservation.check_in }}</td>
+                            <td>{{ reservation.check_out }}</td>
+                            <td>{{ 'Confirmée' if reservation.status == 'confirmed' else 'En Attente' }}</td>
+                            <td>
+                                <a href="{{ url_for('edit_reservation', id=reservation.id) }}" class="uk-button uk-button-primary uk-button-small">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </a>
+                            
+                                <form action="{{ url_for('delete_reservation', id=reservation.id) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="uk-button uk-button-danger uk-button-small" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?');">
+                                        <i class="fas fa-trash-alt"></i> Annuler
+                                    </button>
+                                </form>
+                            </td>                        
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{{ url_for('add_reservation') }}" class="uk-button uk-button-primary">
+                    <i class="fas fa-calendar-plus"></i> Ajouter une réservation
                 </a>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Contenu principal -->
-    <div id="content" class="uk-width-expand uk-padding uk-container">
-        <h1 class="uk-text-center uk-margin-bottom uk-text-lead uk-padding-small uk-border-rounded uk-background-gradient uk-box-shadow-large animated-title">
-            Bienvenue, {{ admin.nom }} {{ admin.prenom }} dans votre Dashboard
-        </h1>
-
-        <!-- Gestion des utilisateurs -->
-        <div id="user-management" class="uk-hidden">
-            <h2 class="uk-text-bold uk-margin-bottom">Gestion des Utilisateurs</h2>
-            <table class="uk-table uk-table-divider uk-table-hover">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Email</th>
-                        <th>Téléphone</th>
-                        <th>Date de naissance</th>
-                        <th>Sexe</th>
-                        <th>Adresse</th>
-                        <th>Rôle</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                    <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.nom }}</td>
-                        <td>{{ user.prenom }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.tel }}</td>
-                        <td>{{ user.date_naissance }}</td>
-                        <td>{{ user.sexe }}</td>
-                        <td>{{ user.adresse }}</td>
-                        <td>{{ user.role }}</td>
-                        <td>
-                            <a href="{{ url_for('edit_user', id=user.id) }}" class="uk-button uk-button-primary uk-button-small">
-                                <i class="fas fa-edit"></i> Modifier
-                            </a>
-                            <a href="{{ url_for('delete_user', id=user.id) }}" class="uk-button uk-button-danger uk-button-small" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
-                                <i class="fas fa-trash-alt"></i> Supprimer
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <a href="{{ url_for('create_user') }}" class="uk-button uk-button-primary">
-                <i class="fas fa-user-plus"></i> Ajouter un utilisateur
-            </a>
-        </div>
-
-        <!-- Gestion des chambres -->
-        <div id="room-management" class="uk-hidden">
-            <h2 class="uk-text-bold uk-margin-bottom">Gestion des Chambres</h2>
-            <table class="uk-table uk-table-divider uk-table-hover">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Numéro</th>
-                        <th>Type</th>
-                        <th>Capacité</th>
-                        <th>Prix</th>
-                        <th>Position</th>
-                        <th>Disponible</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for room in rooms %}
-                    <tr>
-                        <td>{{ room.id }}</td>
-                        <td>{{ room.numero }}</td>
-                        <td>{{ room.type }}</td>
-                        <td>{{ room.capacite }}</td>
-                        <td>{{ room.prix }} €</td>
-                        <td>{{ room.position }}</td>
-                        <td>{{ 'Oui' if room.disponible else 'Non' }}</td>
-                        <td>{{ room.description }}</td>
-                        <td>
-                            <a href="{{ url_for('edit_room', id=room.id) }}" class="uk-button uk-button-primary uk-button-small">
-                                <i class="fas fa-edit"></i> Modifier
-                            </a>
-                            <a href="{{ url_for('delete_room', id=room.id) }}" class="uk-button uk-button-danger uk-button-small" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?');">
-                                <i class="fas fa-trash-alt"></i> Supprimer
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <a href="{{ url_for('add_room') }}" class="uk-button uk-button-primary">
-                <i class="fas fa-bed"></i> Ajouter une chambre
-            </a>
-        </div>
-
-        <!-- Gestion des réservations -->
-        <div id="reservation-management" class="uk-hidden">
-            <h2 class="uk-text-bold uk-margin-bottom">Gestion des Réservations</h2>
-            <table class="uk-table uk-table-divider uk-table-hover">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nom Complet</th>
-                        <th>Email</th>
-                        <th>Chambre</th>
-                        <th>Date d'Arrivée</th>
-                        <th>Date de Départ</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for reservation in reservations %}
-                    <tr>
-                        <td>{{ reservation.id }}</td>
-                        <td>{{ reservation.full_name }}</td>
-                        <td>{{ reservation.email }}</td>
-                        <td>{{ reservation.room_type }}</td>
-                        <td>{{ reservation.check_in }}</td>
-                        <td>{{ reservation.check_out }}</td>
-                        <td>{{ 'Confirmée' if reservation.status == 'confirmed' else 'En Attente' }}</td>
-                        <td>
-                            <a href="{{ url_for('edit_reservation', id=reservation.id) }}" class="uk-button uk-button-primary uk-button-small">
-                                <i class="fas fa-edit"></i> Modifier
-                            </a>
-                        
-                            <form action="{{ url_for('delete_reservation', id=reservation.id) }}" method="POST" style="display:inline;">
-                                <button type="submit" class="uk-button uk-button-danger uk-button-small" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?');">
-                                    <i class="fas fa-trash-alt"></i> Annuler
-                                </button>
-                            </form>
-                        </td>                        
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <a href="{{ url_for('add_reservation') }}" class="uk-button uk-button-primary">
-                <i class="fas fa-calendar-plus"></i> Ajouter une réservation
-            </a>
+            </div>
         </div>
     </div>
-</div>
 
-{% endblock %}
+    {% endblock %}
 
-<script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit-icons.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit-icons.min.js"></script>
 
-<script>
-    document.getElementById("users-link").addEventListener("click", function (event) {
-        event.preventDefault();
-        document.getElementById("user-management").classList.remove("uk-hidden");
-        document.getElementById("room-management").classList.add("uk-hidden");
-        document.getElementById("reservation-management").classList.add("uk-hidden");
-    });
+    <script>
+        document.getElementById("users-link").addEventListener("click", function (event) {
+            event.preventDefault();
+            document.getElementById("user-management").classList.remove("uk-hidden");
+            document.getElementById("room-management").classList.add("uk-hidden");
+            document.getElementById("reservation-management").classList.add("uk-hidden");
+        });
 
-    document.getElementById("rooms-link").addEventListener("click", function (event) {
-        event.preventDefault();
-        document.getElementById("room-management").classList.remove("uk-hidden");
-        document.getElementById("user-management").classList.add("uk-hidden");
-        document.getElementById("reservation-management").classList.add("uk-hidden");
-    });
+        document.getElementById("rooms-link").addEventListener("click", function (event) {
+            event.preventDefault();
+            document.getElementById("room-management").classList.remove("uk-hidden");
+            document.getElementById("user-management").classList.add("uk-hidden");
+            document.getElementById("reservation-management").classList.add("uk-hidden");
+        });
 
-    document.getElementById("reservations-link").addEventListener("click", function (event) {
-        event.preventDefault();
-        document.getElementById("reservation-management").classList.remove("uk-hidden");
-        document.getElementById("user-management").classList.add("uk-hidden");
-        document.getElementById("room-management").classList.add("uk-hidden");
-    });
-</script>
+        document.getElementById("reservations-link").addEventListener("click", function (event) {
+            event.preventDefault();
+            document.getElementById("reservation-management").classList.remove("uk-hidden");
+            document.getElementById("user-management").classList.add("uk-hidden");
+            document.getElementById("room-management").classList.add("uk-hidden");
+        });
+    </script>
 
-<style>
-    .uk-background-gradient {
-        background: linear-gradient(45deg, #56ccf2, #2f80ed);
-        color: white;
-    }
+    <style>
+        .uk-background-gradient {
+            background: linear-gradient(45deg, #56ccf2, #2f80ed);
+            color: white;
+        }
 
-    #sidebar {
-        background-color: #34495e;
-        color: white;
-    }
+        #sidebar {
+            background-color: #34495e;
+            color: white;
+        }
 
-    .sidebar-link {
-        padding: 10px;
-        display: block;
-        color: white;
-        text-decoration: none;
-    }
+        .sidebar-link {
+            padding: 10px;
+            display: block;
+            color: white;
+            text-decoration: none;
+        }
 
-    .sidebar-link:hover {
-        background-color: #f39c12;
-        color: #34495e;
-    }
-</style>
-</body>
-</html>
+        .sidebar-link:hover {
+            background-color: #f39c12;
+            color: #34495e;
+        }
+    </style>
+    </body>
+    </html>

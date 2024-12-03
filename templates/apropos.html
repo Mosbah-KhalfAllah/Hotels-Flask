@@ -1,8 +1,187 @@
 {% extends 'base.html' %}
 
-{% block title %}À Propos - Gestion Hôtels{% endblock %}
+{% block title %}À Propos - Burj Al Arab{% endblock %}
 
 {% block content %}
+<div class="container py-5">
+    <!-- Titre principal -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold title-animation" style="color: #ff6f61;">À Propos de Burj Al Arab</h1>
+        <p class="fs-5" style="color: #333;">Découvrez un lieu d'exception où le luxe rencontre l'innovation.</p>
+    </div>
 
+    <!-- Section Image + Texte -->
+    <div class="row align-items-center mb-5">
+        <!-- Image -->
+        <div class="col-md-6">
+            <div class="image-container">
+                <img src="/static/images/prop-1.jpg" alt="Burj Al Arab" class="img-fluid rounded shadow-lg zoom-animation">
+            </div>
+        </div>
 
+        <!-- Texte -->
+        <div class="col-md-6 fade-in-animation">
+            <h2 class="fw-bold" style="color: #3aaf85;">Notre Histoire</h2>
+            <p class="fs-6" style="color: #555;">
+                Depuis 1999, le Burj Al Arab est une icône d'excellence et de raffinement. Cet hôtel emblématique, construit sur une île artificielle, symbolise l'élégance moderne et l'innovation architecturale.
+            </p>
+            <h2 class="fw-bold" style="color: #3aaf85;">Notre Vision</h2>
+            <p class="fs-6" style="color: #555;">
+                Offrir une expérience inoubliable en combinant des services haut de gamme avec une attention méticuleuse aux détails.
+            </p>
+        </div>
+    </div>
+
+    <!-- Section Services -->
+    <div class="py-5 mb-5 services-section">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="color: #ff6f61;">Ce que nous proposons</h2>
+            <p style="color: #333;">Des services qui redéfinissent le luxe.</p>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4 service-box slide-up-animation">
+                <i class="bi bi-gem fs-1" style="color: #ff6f61;"></i>
+                <h5 class="fw-bold mt-3">Luxe Exceptionnel</h5>
+                <p>Des suites prestigieuses avec une vue spectaculaire.</p>
+            </div>
+            <div class="col-md-4 mb-4 service-box slide-up-animation">
+                <i class="bi bi-droplet-half fs-1" style="color: #3aaf85;"></i>
+                <h5 class="fw-bold mt-3">Bien-être</h5>
+                <p>Des spas exclusifs pour une détente totale.</p>
+            </div>
+            <div class="col-md-4 mb-4 service-box slide-up-animation">
+                <i class="bi bi-map fs-1" style="color: #f7b731;"></i>
+                <h5 class="fw-bold mt-3">Emplacement Unique</h5>
+                <p>Situé sur une île, avec des panoramas incomparables.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Témoignages -->
+    <div class="py-5 text-white testimonial-section">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">Ce que disent nos clients</h2>
+            <p>Des expériences mémorables partagées par nos visiteurs.</p>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-4 fade-in-animation">
+                <blockquote class="blockquote bg-light p-4 rounded shadow-lg">
+                    <p>"Un service parfait et un cadre extraordinaire."</p>
+                    <footer class="blockquote-footer text-primary">Sophie Martin</footer>
+                </blockquote>
+            </div>
+            <div class="col-md-4 fade-in-animation">
+                <blockquote class="blockquote bg-light p-4 rounded shadow-lg">
+                    <p>"Un séjour magique avec une vue incroyable."</p>
+                    
+                    <footer class="blockquote-footer text-primary">Ahmed Ben Salah</footer>
+                </blockquote>
+            </div>
+            <div class="col-md-4 fade-in-animation">
+                <blockquote class="blockquote bg-light p-4 rounded shadow-lg">
+                    <p>"L'élégance et le luxe au sommet."</p>
+                    <footer class="blockquote-footer text-primary">Emily Clarkson</footer>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    /* Style global */
+body {
+    background-color: #fdfdfd;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Animations */
+.title-animation {
+    animation: fadeInDown 1.2s ease-in-out;
+}
+
+.zoom-animation {
+    transition: transform 0.3s ease;
+}
+
+.zoom-animation:hover {
+    transform: scale(1.05);
+}
+
+.fade-in-animation {
+    opacity: 0;
+    animation: fadeIn 1.5s forwards;
+}
+
+.slide-up-animation {
+    opacity: 0;
+    transform: translateY(50px);
+    animation: slideUp 1.5s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Sections spécifiques */
+.services-section {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 30px;
+}
+
+.service-box:hover {
+    background-color: #ffffff;
+    transform: scale(1.03);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease;
+}
+
+.testimonial-section {
+    background: linear-gradient(45deg, #ff6f61, #3aaf85);
+    border-radius: 12px;
+    padding: 30px;
+}
+
+blockquote {
+    font-size: 1.1rem;
+    font-style: italic;
+    position: relative;
+}
+
+blockquote::before {
+    content: '“';
+    font-size: 4rem;
+    color: #ff6f61;
+    position: absolute;
+    top: -20px;
+    left: -20px;
+}
+
+</style>
 {% endblock %}

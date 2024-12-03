@@ -148,18 +148,18 @@
                 </iframe>
             </div>
             <div class="col-md-6">
-                <form>
+                <form method="POST" action="{{ url_for('contact') }}">
                     <div class="mb-3">
                         <label for="name" class="form-label">Nom complet</label>
-                        <input type="text" class="form-control" id="name" placeholder="Votre nom">
+                        <input type="text" class="form-control" id="name" name="nom_complet" placeholder="Votre nom" required>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="Votre email">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Votre email" required>
                     </div>
                     <div class="mb-3">
                         <label for="message" class="form-label">Message</label>
-                        <textarea class="form-control" id="message" rows="4" placeholder="Votre message"></textarea>
+                        <textarea class="form-control" id="message" name="message" rows="4" placeholder="Votre message" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-danger">Envoyer</button>
                 </form>

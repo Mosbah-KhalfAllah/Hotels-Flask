@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Ajouter un Utilisateur{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4" style="color: #ff6347;">
+        <i class="fas fa-user-plus"></i> Ajouter un Utilisateur
+    </h2>
+    <form method="POST" class="p-5 shadow-lg rounded" style="background-color: #f9f9f9;">
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="nom" class="form-label"><i class="fas fa-user"></i> Nom</label>
+                <input type="text" class="form-control" id="nom" name="nom" required placeholder="Entrez le nom">
+            </div>
+            <div class="col-md-6">
+                <label for="prenom" class="form-label"><i class="fas fa-user-tag"></i> Prénom</label>
+                <input type="text" class="form-control" id="prenom" name="prenom" required placeholder="Entrez le prénom">
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="email" class="form-label"><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" class="form-control" id="email" name="email" required placeholder="Entrez votre email">
+            </div>
+            <div class="col-md-6">
+                <label for="tel" class="form-label"><i class="fas fa-phone"></i> Téléphone</label>
+                <input type="text" class="form-control" id="tel" name="tel" required placeholder="Entrez le numéro de téléphone">
+            </div>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="date_naissance" class="form-label"><i class="fas fa-birthday-cake"></i> Date de Naissance</label>
+                <input type="date" class="form-control" id="date_naissance" name="date_naissance" required>
+            </div>
+            <div class="col-md-6">
+                <label for="sexe" class="form-label"><i class="fas fa-venus-mars"></i> Sexe</label>
+                <select class="form-select" id="sexe" name="sexe" required>
+                    <option value="Homme">Homme</option>
+                    <option value="Femme">Femme</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="adresse" class="form-label"><i class="fas fa-home"></i> Adresse</label>
+            <textarea class="form-control" id="adresse" name="adresse" rows="3" required placeholder="Entrez l'adresse"></textarea>
+        </div>
+
+        <div class="mb-4">
+            <label for="role" class="form-label"><i class="fas fa-cogs"></i> Rôle</label>
+            <select class="form-select" id="role" name="role" required>
+                <option value="user">Utilisateur</option>
+                <option value="admin">Administrateur</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="motdepasse" class="form-label"><i class="fas fa-lock"></i> Mot de passe</label>
+            <input type="password" class="form-control" id="motdepasse" name="motdepasse" required placeholder="Entrez un mot de passe">
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-danger btn-lg">
+                <i class="fas fa-user-plus"></i> Ajouter l'Utilisateur
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    form {
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: #ff6347;
+        box-shadow: 0 0 10px rgba(255, 99, 71, 0.5);
+    }
+
+    .btn-danger:hover {
+        background-color: #e74c3c;
+        transform: scale(1.05);
+    }
+</style>
+
+{% endblock %}

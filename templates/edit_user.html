@@ -1,161 +1,99 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifier un Utilisateur</title>
-    <link href="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/css/uikit.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(10deg, #8e2de2, #4a00e0);
-            color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
+{% extends 'base.html' %}
 
-        .uk-container {
-            max-width: 700px;
-            background: #2c2c54;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            animation: fadeIn 1s ease-in-out;
-        }
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="text-center mb-4" style="color: #ff6347;">
+      <i class="fas fa-user-edit"></i> Modifier l'Utilisateur
+    </h2>
+    <form method="POST" class="p-5 shadow-lg rounded" style="background-color: #f9f9f9;">
+      
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label for="nom" class="form-label"><i class="fas fa-user"></i> Nom</label>
+          <input type="text" class="form-control" id="nom" name="nom" value="{{ user.nom }}" required readonly>
+        </div>
+        <div class="col-md-6">
+          <label for="prenom" class="form-label"><i class="fas fa-user-tag"></i> Prénom</label>
+          <input type="text" class="form-control" id="prenom" name="prenom" value="{{ user.prenom }}" required readonly>
+        </div>
+      </div>
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label for="email" class="form-label"><i class="fas fa-envelope"></i> Email</label>
+          <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required placeholder="Entrez votre email">
+        </div>
+        <div class="col-md-6">
+          <label for="tel" class="form-label"><i class="fas fa-phone"></i> Téléphone</label>
+          <input type="text" class="form-control" id="tel" name="tel" value="{{ user.tel }}" required placeholder="Entrez le numéro de téléphone">
+        </div>
+      </div>
+ 
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label for="date_naissance" class="form-label"><i class="fas fa-birthday-cake"></i> Date de Naissance</label>
+          <input type="date" class="form-control" id="date_naissance" name="date_naissance" value="{{ user.date_naissance }}" required readonly>
+        </div>
+        <div class="col-md-6">
+          <label for="sexe" class="form-label"><i class="fas fa-venus-mars"></i> Sexe</label>
 
-        h1.uk-text-primary {
-            color: #00aaff;
-            font-weight: 700;
-            text-align: center;
-            font-size: 2.2em;
-            margin-bottom: 20px;
-        }
+          <select class="form-select" id="sexe" name="sexe" required>
+            <option value="Homme" {% if user.sexe == 'Homme' or not user.sexe %}selected{% endif %}>Homme</option>
+            <option value="Femme" {% if user.sexe == 'Femme' %}selected{% endif %}>Femme</option>
+          </select>
+          
+        </div>
+      </div>
 
-        .uk-input, .uk-select {
-            background: #1e3a66;
-            border: none;
-            border-radius: 8px;
-            color: #f5f5f5;
-            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-        }
+      <div class="mb-4">
+        <label for="adresse" class="form-label"><i class="fas fa-home"></i> Adresse</label>
+        <textarea class="form-control" id="adresse" name="adresse" rows="3" required>{{ user.adresse }}</textarea>
+      </div>
 
-        .uk-input:focus, .uk-select:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 170, 255, 0.7);
-        }
+      <div class="mb-4">
+        <label for="role" class="form-label"><i class="fas fa-cogs"></i> Rôle</label>
+        <select class="form-select" id="role" name="role" required>
+          <option value="user" {% if user.role == 'user' %}selected{% endif %}>Utilisateur</option>
+          <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Administrateur</option>
+        </select>
+      </div>
 
-        .uk-button-primary {
-            background: #00aaff;
-            border: none;
-            color: #fff;
-            font-weight: bold;
-            border-radius: 8px;
-            transition: background 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 5px 15px rgba(0, 170, 255, 0.5);
-        }
+      <div class="mb-4">
+        <label for="motdepasse" class="form-label"><i class="fas fa-lock"></i> Mot de passe</label>
+        <input type="password" class="form-control" id="motdepasse" name="motdepasse" placeholder="Laissez vide pour ne pas modifier">
+      </div>
 
-        .uk-button-primary:hover {
-            background: #008ecc;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 170, 255, 0.7);
-        }
+      <div class="text-center">
+        <button type="submit" class="btn btn-danger btn-lg">
+          <i class="fas fa-save"></i> Sauvegarder
+        </button>
+      </div>
+    </form>
+  </div>
 
-        .uk-form-label {
-            font-weight: 500;
-            color: #a3d4ff;
-        }
+  <style>
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
 
-        label span {
-            margin-right: 10px;
-        }
+    form {
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
 
-        .uk-margin-bottom {
-            margin-bottom: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="uk-container">
-        <h1 class="uk-text-primary">
-            <span uk-icon="icon: user; ratio: 1.8"></span>
-            Modifier un Utilisateur
-        </h1>
+    input:focus, textarea:focus, select:focus {
+      border-color: #ff6347;
+      box-shadow: 0 0 10px rgba(255, 99, 71, 0.5);
+    }
 
-        <form method="POST">
-            <div class="uk-margin uk-margin-bottom">
-                <label for="nom" class="uk-form-label">
-                    <span uk-icon="icon: user; ratio: 1.2"></span> Nom
-                </label>
-                <input type="text" id="nom" name="nom" class="uk-input" value="{{ user.nom }}" required>
-            </div>
-            <div class="uk-margin uk-margin-bottom">
-                <label for="prenom" class="uk-form-label">
-                    <span uk-icon="icon: user; ratio: 1.2"></span> Prénom
-                </label>
-                <input type="text" id="prenom" name="prenom" class="uk-input" value="{{ user.prenom }}" required>
-            </div>
-            <div class="uk-margin uk-margin-bottom">
-                <label for="email" class="uk-form-label">
-                    <span uk-icon="icon: mail; ratio: 1.2"></span> Email
-                </label>
-                <input type="email" id="email" name="email" class="uk-input" value="{{ user.email }}" required>
-            </div>
-            <div class="uk-margin uk-margin-bottom">
-                <label for="tel" class="uk-form-label">
-                    <span uk-icon="icon: receiver; ratio: 1.2"></span> Téléphone
-                </label>
-                <input type="text" id="tel" name="tel" class="uk-input" value="{{ user.tel }}" required>
-            </div>
-            <div class="uk-margin uk-margin-bottom">
-                <label for="date_naissance" class="uk-form-label">
-                    <span uk-icon="icon: calendar; ratio: 1.2"></span> Date de naissance
-                </label>
-                <input type="date" id="date_naissance" name="date_naissance" class="uk-input" value="{{ user.date_naissance }}" required>
-            </div>
-            <div class="uk-margin uk-margin-bottom">
-                <label for="sexe" class="uk-form-label">
-                    <span uk-icon="icon: heart; ratio: 1.2"></span> Sexe
-                </label>
-                <select id="sexe" name="sexe" class="uk-select" required>
-                    <option value="Homme" {% if user.sexe == 'Homme' %}selected{% endif %}>Homme</option>
-                    <option value="Femme" {% if user.sexe == 'Femme' %}selected{% endif %}>Femme</option>
-                </select>
-            </div>
-            <div class="uk-margin uk-margin-bottom">
-                <label for="adresse" class="uk-form-label">
-                    <span uk-icon="icon: location; ratio: 1.2"></span> Adresse
-                </label>
-                <input type="text" id="adresse" name="adresse" class="uk-input" value="{{ user.adresse }}" required>
-            </div>
-            <div class="uk-margin uk-margin-bottom">
-                <label for="role" class="uk-form-label">
-                    <span uk-icon="icon: lock; ratio: 1.2"></span> Rôle
-                </label>
-                <select id="role" name="role" class="uk-select" required>
-                    <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
-                    <option value="user" {% if user.role == 'user' %}selected{% endif %}>Utilisateur</option>
-                </select>
-            </div>
-            <button type="submit" class="uk-button uk-button-primary uk-width-1-1">
-                <span uk-icon="ratio: 1.2"></span> Mettre à jour
-            </button>
-        </form>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit-icons.min.js"></script>
-</body>
-</html>
+    .btn-danger:hover {
+      background-color: #e74c3c;
+      transform: scale(1.05);
+    }
+  </style>
+{% endblock %}
