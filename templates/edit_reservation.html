@@ -1,42 +1,91 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifier la réservation</title>
-    <link href="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/css/uikit.min.css" rel="stylesheet" />
-</head>
-<body>
+{% extends 'base.html' %}
 
-<div class="uk-container uk-margin-top">
-    <h2>Modifier la réservation de {{ reservation.nom }}</h2>
-
-    <form action="{{ url_for('edit_reservation', id=reservation.id) }}" method="POST">
-        <div class="uk-margin">
-            <label class="uk-form-label" for="nom">Nom du client</label>
-            <input class="uk-input" type="text" id="nom" name="nom" value="{{ reservation.nom }}" required>
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="text-center mb-4" style="color: #ff6347;">
+      <i class="fas fa-bed"></i> Modifier la Réservation
+    </h2>
+    <form method="POST" class="p-5 shadow-lg rounded" style="background-color: #f9f9f9;">
+      
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label for="full_name" class="form-label"><i class="fas fa-user"></i> Nom du Client</label>
+          <input type="text" class="form-control" id="full_name" name="full_name" value="{{ reservation.full_name }}" required>
         </div>
-
-        <div class="uk-margin">
-            <label class="uk-form-label" for="date_arrivee">Date d'arrivée</label>
-            <input class="uk-input" type="text" id="date_arrivee" name="date_arrivee" value="{{ reservation.date_arrivee }}" required>
+        <div class="col-md-6">
+          <label for="email" class="form-label"><i class="fas fa-envelope"></i> Email</label>
+          <input type="email" class="form-control" id="email" name="email" value="{{ reservation.email }}" required>
         </div>
+      </div>
 
-        <div class="uk-margin">
-            <label class="uk-form-label" for="date_depart">Date de départ</label>
-            <input class="uk-input" type="text" id="date_depart" name="date_depart" value="{{ reservation.date_depart }}" required>
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label for="check_in" class="form-label"><i class="fas fa-calendar-day"></i> Date d'Arrivée</label>
+          <input type="date" class="form-control" id="check_in" name="check_in" value="{{ reservation.check_in }}" required>
         </div>
-
-        <div class="uk-margin">
-            <label class="uk-form-label" for="chambre">Numéro de chambre</label>
-            <input class="uk-input" type="text" id="chambre" name="chambre" value="{{ reservation.chambre }}" required>
+        <div class="col-md-6">
+          <label for="check_out" class="form-label"><i class="fas fa-calendar-alt"></i> Date de Départ</label>
+          <input type="date" class="form-control" id="check_out" name="check_out" value="{{ reservation.check_out }}" required>
         </div>
+      </div>
 
-        <button class="uk-button uk-button-primary uk-button-large" type="submit">Mettre à jour</button>
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label for="room_type" class="form-label"><i class="fas fa-bed"></i> Type de Chambre</label>
+          <select class="form-select" id="room_type" name="room_type" required>
+            <option value="suite" {% if reservation.room_type == 'suite' %}selected{% endif %}>Suite Royale</option>
+            <option value="deluxe" {% if reservation.room_type == 'deluxe' %}selected{% endif %}>Chambre Deluxe</option>
+            <option value="standard" {% if reservation.room_type == 'standard' %}selected{% endif %}>Chambre Standard</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="adults" class="form-label"><i class="fas fa-users"></i> Nombre d'Adultes</label>
+          <input type="number" class="form-control" id="adults" name="adults" value="{{ reservation.adults }}" required>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label for="children" class="form-label"><i class="fas fa-child"></i> Nombre d'Enfants</label>
+          <input type="number" class="form-control" id="children" name="children" value="{{ reservation.children }}" required>
+        </div>
+        <div class="col-md-6">
+          <label for="special_requests" class="form-label"><i class="fas fa-gift"></i> Demandes Spéciales</label>
+          <textarea class="form-control" id="special_requests" name="special_requests" rows="3">{{ reservation.special_requests }}</textarea>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-danger btn-lg">
+          <i class="fas fa-save"></i> Sauvegarder les Modifications
+        </button>
+      </div>
     </form>
-</div>
+  </div>
 
-<script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit-icons.min.js"></script>
-</body>
-</html>
+  <style>
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    form {
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #ff6347;
+      box-shadow: 0 0 10px rgba(255, 99, 71, 0.5);
+    }
+
+    .btn-danger:hover {
+      background-color: #e74c3c;
+      transform: scale(1.05);
+    }
+  </style>
+{% endblock %}

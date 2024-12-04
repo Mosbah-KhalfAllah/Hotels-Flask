@@ -1,33 +1,65 @@
-<!-- add_reservation.html -->
 {% extends 'base.html' %}
 
 {% block title %}Ajouter une Réservation{% endblock %}
 
 {% block content %}
-    <h2>Ajouter une Réservation</h2>
-    <form action="{{ url_for('add_reservation') }}" method="POST">
-        <div class="uk-margin">
-            <label for="client_name" class="uk-form-label">Nom du Client</label>
-            <input class="uk-input" type="text" id="client_name" name="client_name" required>
-        </div>
+<div class="uk-container uk-margin-top">
+    <h2 class="uk-heading-line"><span>Ajouter une Réservation</span></h2>
 
+    <form method="POST" class="uk-form-stacked">
         <div class="uk-margin">
-            <label for="room_number" class="uk-form-label">Numéro de Chambre</label>
-            <input class="uk-input" type="text" id="room_number" name="room_number" required>
+            <label class="uk-form-label" for="full_name">Nom complet</label>
+            <div class="uk-form-controls">
+                <input class="uk-input" id="full_name" name="full_name" type="text" placeholder="Entrez le nom complet" required>
+            </div>
         </div>
-
         <div class="uk-margin">
-            <label for="check_in" class="uk-form-label">Date d'Arrivée</label>
-            <input class="uk-input" type="date" id="check_in" name="check_in" required>
+            <label class="uk-form-label" for="email">Email</label>
+            <div class="uk-form-controls">
+                <input class="uk-input" id="email" name="email" type="email" placeholder="Entrez l'email" required>
+            </div>
         </div>
-
         <div class="uk-margin">
-            <label for="check_out" class="uk-form-label">Date de Départ</label>
-            <input class="uk-input" type="date" id="check_out" name="check_out" required>
+            <label class="uk-form-label" for="check_in">Date d'arrivée</label>
+            <div class="uk-form-controls">
+                <input class="uk-input" id="check_in" name="check_in" type="date" required>
+            </div>
         </div>
-
         <div class="uk-margin">
-            <button class="uk-button uk-button-primary" type="submit">Ajouter la Réservation</button>
+            <label class="uk-form-label" for="check_out">Date de départ</label>
+            <div class="uk-form-controls">
+                <input class="uk-input" id="check_out" name="check_out" type="date" required>
+            </div>
         </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="room_type">Type de chambre</label>
+            <div class="uk-form-controls">
+                <select class="uk-select" id="room_type" name="room_type" required>
+                    <option value="suite">Suite</option>
+                    <option value="deluxe">Deluxe</option>
+                    <option value="standard">Standard</option>
+                </select>
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="adults">Nombre d'adultes</label>
+            <div class="uk-form-controls">
+                <input class="uk-input" id="adults" name="adults" type="number" min="1" placeholder="Nombre d'adultes" required>
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="children">Nombre d'enfants</label>
+            <div class="uk-form-controls">
+                <input class="uk-input" id="children" name="children" type="number" min="0" placeholder="Nombre d'enfants">
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="special_requests">Demandes spéciales</label>
+            <div class="uk-form-controls">
+                <textarea class="uk-textarea" id="special_requests" name="special_requests" placeholder="Entrez vos demandes spéciales"></textarea>
+            </div>
+        </div>
+        <button class="uk-button uk-button-primary" type="submit">Ajouter</button>
     </form>
+</div>
 {% endblock %}

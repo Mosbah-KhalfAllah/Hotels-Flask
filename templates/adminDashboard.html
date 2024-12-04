@@ -16,7 +16,6 @@
         <a href="{{ url_for('home') }}" class="uk-position-top-left uk-padding-small uk-text-primary">
             <i class="fas fa-home fa-2x"></i>
         </a>
-        <!-- Sidebar -->
         <nav id="sidebar" class="uk-background-muted uk-light uk-width-1-4 uk-height-viewport uk-box-shadow-small">
             <div class="uk-text-center uk-padding">
                 <h4 class="uk-text-bold uk-text-primary">Tableau de Bord</h4>
@@ -44,7 +43,6 @@
             </ul>
         </nav>
 
-        <!-- Contenu principal -->
         <div id="content" class="uk-width-expand uk-padding uk-container">
             <h1 class="uk-text-center uk-margin-bottom uk-text-lead uk-padding-small uk-border-rounded uk-background-gradient uk-box-shadow-large animated-title">
                 {% if admin %}
@@ -54,7 +52,6 @@
                 {% endif %}
             </h1>
 
-            <!-- Gestion des utilisateurs -->
             <div id="user-management" class="uk-hidden">
                 <h2 class="uk-text-bold uk-margin-bottom">Gestion des Utilisateurs</h2>
                 <table class="uk-table uk-table-divider uk-table-hover">
@@ -101,7 +98,6 @@
                 </a>
             </div>
 
-            <!-- Gestion des chambres -->
             <div id="room-management" class="uk-hidden">
                 <h2 class="uk-text-bold uk-margin-bottom">Gestion des Chambres</h2>
                 <table class="uk-table uk-table-divider uk-table-hover">
@@ -111,34 +107,38 @@
                             <th>Numéro</th>
                             <th>Type</th>
                             <th>Capacité</th>
-                            <th>Prix</th>
+                            <th>Prix (€)</th>
                             <th>Position</th>
                             <th>Disponible</th>
                             <th>Description</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="room-list">
                         {% for room in rooms %}
                         <tr>
                             <td>{{ room.id }}</td>
                             <td>{{ room.numero }}</td>
                             <td>{{ room.type }}</td>
-                            <td>{{ room.capacite }}</td>
-                            <td>{{ room.prix }} €</td>
+                             <td>{{ room.capacite }}</td>
+                            <td>{{ room.prix }}</td>
                             <td>{{ room.position }}</td>
                             <td>{{ 'Oui' if room.disponible else 'Non' }}</td>
                             <td>{{ room.description }}</td>
                             <td>
                                 <a href="{{ url_for('edit_room', id=room.id) }}" class="uk-button uk-button-primary uk-button-small">
-                                    <i class="fas fa-edit"></i> Modifier
+                                    Modifier
                                 </a>
-                                <a href="{{ url_for('delete_room', id=room.id) }}" class="uk-button uk-button-danger uk-button-small" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?');">
-                                    <i class="fas fa-trash-alt"></i> Supprimer
-                                </a>
+                                <form action="{{ url_for('delete_room', id=room.id) }}" method="post" style="display: inline;">
+                                    <button type="submit" class="uk-button uk-button-danger uk-button-small" 
+                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?');">
+                                        Supprimer
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         {% endfor %}
+
                     </tbody>
                 </table>
                 <a href="{{ url_for('add_room') }}" class="uk-button uk-button-primary">
@@ -146,7 +146,6 @@
                 </a>
             </div>
 
-            <!-- Gestion des réservations -->
             <div id="reservation-management" class="uk-hidden">
                 <h2 class="uk-text-bold uk-margin-bottom">Gestion des Réservations</h2>
                 <table class="uk-table uk-table-divider uk-table-hover">
@@ -158,6 +157,10 @@
                             <th>Chambre</th>
                             <th>Date d'Arrivée</th>
                             <th>Date de Départ</th>
+                            <th>Adultes</th>
+                            <th>Enfants</th>
+                            <th>Demandes Spéciales</th>
+                            <th>Date de Création</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -171,12 +174,16 @@
                             <td>{{ reservation.room_type }}</td>
                             <td>{{ reservation.check_in }}</td>
                             <td>{{ reservation.check_out }}</td>
+                            <td>{{ reservation.adults }}</td>
+                            <td>{{ reservation.children }}</td>
+                            <td>{{ reservation.special_requests or 'Aucune demande' }}</td>
+                            <td>{{ reservation.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
                             <td>{{ 'Confirmée' if reservation.status == 'confirmed' else 'En Attente' }}</td>
                             <td>
                                 <a href="{{ url_for('edit_reservation', id=reservation.id) }}" class="uk-button uk-button-primary uk-button-small">
                                     <i class="fas fa-edit"></i> Modifier
                                 </a>
-                            
+                                
                                 <form action="{{ url_for('delete_reservation', id=reservation.id) }}" method="POST" style="display:inline;">
                                     <button type="submit" class="uk-button uk-button-danger uk-button-small" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?');">
                                         <i class="fas fa-trash-alt"></i> Annuler
@@ -191,6 +198,7 @@
                     <i class="fas fa-calendar-plus"></i> Ajouter une réservation
                 </a>
             </div>
+            
         </div>
     </div>
 

@@ -69,21 +69,17 @@ class Contact(db.Model):
 def home():
     return render_template('home.html')
 
-
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
-        # Récupération des données
         nom_complet = request.form.get('nom_complet')
         email = request.form.get('email')
         message = request.form.get('message')
 
-        # Vérification des données
         if not nom_complet or not email or not message:
             flash("Tous les champs sont obligatoires.", "danger")
             return redirect('/home')
 
-        # Enregistrer ou traiter les données
         try:
             nouveau_message = Contact(nom_complet=nom_complet, email=email, message=message)
             db.session.add(nouveau_message)
@@ -151,40 +147,61 @@ def add_reservation():
         check_in = request.form['check_in']
         check_out = request.form['check_out']
         room_type = request.form['room_type']
-        adults = request.form['adults']
-        children = request.form['children']
-        special_requests = request.form['special_requests']
+        adults = int(request.form['adults'])
+        children = int(request.form.get('children', 0))
+        special_requests = request.form.get('special_requests', '')
 
-        reservation = Reservation(full_name=full_name, email=email, check_in=check_in,
-                                  check_out=check_out, room_type=room_type, adults=adults,
-                                  children=children, special_requests=special_requests)
-        db.session.add(reservation)
-        db.session.commit()
+        new_reservation = Reservation(
+            full_name=full_name,
+            email=email,
+            check_in=check_in,
+            check_out=check_out,
+            room_type=room_type,
+            adults=adults,
+            children=children,
+            special_requests=special_requests
+        )
 
-        return redirect(url_for('reservations'))
-
+        try:
+            db.session.add(new_reservation)
+            db.session.commit()
+            flash('Réservation ajoutée avec succès !', 'success')
+            return redirect(url_for('adminDashboard'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erreur lors de l\'ajout de la réservation : {str(e)}', 'danger')
+    
     return render_template('add_reservation.html')
 
 @app.route('/edit_reservation/<int:id>', methods=['GET', 'POST'])
 def edit_reservation(id):
     reservation = Reservation.query.get_or_404(id)
-    
     if request.method == 'POST':
-        reservation.nom = request.form['nom']
-        reservation.date_arrivee = request.form['date_arrivee']
-        reservation.date_depart = request.form['date_depart']
-        reservation.chambre = request.form['chambre']
-        
-        db.session.commit()
-        return redirect(url_for('adminDashboard'))
+        reservation.full_name = request.form['full_name']
+        reservation.email = request.form['email']
+        reservation.check_in = request.form['check_in']
+        reservation.check_out = request.form['check_out']
+        reservation.room_type = request.form['room_type']
+        reservation.adults = int(request.form['adults'])
+        reservation.children = int(request.form.get('children', 0))
+        reservation.special_requests = request.form.get('special_requests', '')
+
+        try:
+            db.session.commit()
+            flash('Réservation mise à jour avec succès !', 'success')
+            return redirect(url_for('adminDashboard'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erreur : {str(e)}', 'danger')
 
     return render_template('edit_reservation.html', reservation=reservation)
 
-@app.route('/delete_reservation/<int:id>', methods=['POST'])
+@app.route('/reservation/delete/<int:id>', methods=['POST'])
 def delete_reservation(id):
-    reservation = Reservation.query.get_or_404(id)
-    db.session.delete(reservation)
-    db.session.commit()
+    reservation = Reservation.query.get(id)
+    if reservation:
+        db.session.delete(reservation)
+        db.session.commit()
     return redirect(url_for('adminDashboard'))
 
 @app.route('/chambres')
@@ -202,50 +219,65 @@ def chambres():
 @app.route('/add_room', methods=['GET', 'POST'])
 def add_room():
     if request.method == 'POST':
-        numero = request.form['room_number']
-        prix = float(request.form['room_price'])
-        position = request.form['room_position']
-        disponible = True if request.form['availability'] == 'true' else False
-        type_chambre = request.form['room_type']
-        capacite = int(request.form['room_capacity'])
-        description = request.form['room_description']
-        
-        nouvelle_chambre = Chambre(
+        numero = request.form['numero']
+        type_chambre = request.form['type']
+        capacite = request.form['capacite']
+        prix = request.form['prix']
+        position = request.form['position']
+        description = request.form['description']
+        disponible = request.form.get('disponible') == '1s'
+
+        new_room = Chambre(
             numero=numero,
-            prix=prix,
-            position=position,
-            disponible=disponible,
             type=type_chambre,
-            capacite=capacite,
-            description=description
+            capacite=int(capacite),
+            prix=float(prix),
+            position=position,
+            description=description,
+            disponible=disponible
         )
 
-        db.session.add(nouvelle_chambre)
+        db.session.add(new_room)
         db.session.commit()
+
+        flash("La chambre a été ajoutée avec succès.", "success")
+        return redirect(url_for('adminDashboard'))
 
     return render_template('add_room.html')
 
 @app.route('/edit_room/<int:id>', methods=['GET', 'POST'])
 def edit_room(id):
-    room = Chambre.query.get_or_404(id)
+    room = Chambre.query.get(id)
     
+    if not room:
+        flash("Chambre non trouvée.", "danger")
+        return redirect(url_for('adminDashboard'))
+
     if request.method == 'POST':
-        room.nom = request.form['nom']
+        room.numero = request.form['numero']
+        room.prix = request.form['prix']
+        room.position = request.form['position']
         room.type = request.form['type']
         room.capacite = request.form['capacite']
-        room.prix = request.form['prix']
         room.description = request.form['description']
+        room.disponible = 'disponible' in request.form
+
         db.session.commit()
+        flash("Chambre modifiée avec succès.", "success")
         return redirect(url_for('adminDashboard'))
 
     return render_template('edit_room.html', room=room)
 
 @app.route('/delete_room/<int:id>', methods=['POST'])
 def delete_room(id):
-    room_to_delete = Chambre.query.get(id)
-    if room_to_delete:
-        db.session.delete(room_to_delete)
-        db.session.commit()
+    chambre = Chambre.query.get(id)
+    if not chambre:
+        flash("Chambre non trouvée.", "danger")
+        return redirect(url_for('adminDashboard'))
+
+    db.session.delete(chambre)
+    db.session.commit()
+    flash("Chambre supprimée avec succès.", "success")
     return redirect(url_for('adminDashboard'))
 
 @app.route('/apropos')
@@ -264,7 +296,6 @@ def users():
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
     if request.method == 'POST':
-        # Traitement du formulaire (identique à avant)
         nom = request.form['nom']
         prenom = request.form['prenom']
         email = request.form['email']

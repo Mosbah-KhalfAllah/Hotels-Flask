@@ -3,35 +3,14 @@
 {% block title %}Chambres Disponibles - Burj Al Arab{% endblock %}
 
 {% block content %}
-<!-- Chambres Section -->
 <div class="chambres-section py-5" style="background-color: #f8f9fa;">
     <div class="container">
         <h2 class="text-center fw-bold mb-5" style="color: #ff7043;">
             Nos Chambres Disponibles
         </h2>
 
-        <!-- Section Filtres -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <select class="form-select" aria-label="Filtrer par type de chambre">
-                    <option selected>Filtrer par type de chambre</option>
-                    <option value="1">Suite Royale</option>
-                    <option value="2">Chambre Deluxe</option>
-                    <option value="3">Chambre Standard</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <input type="number" class="form-control" placeholder="Prix max (€)" aria-label="Prix max">
-            </div>
-            <div class="col-md-4">
-                <button class="btn btn-danger w-100">Appliquer les filtres</button>
-            </div>
-        </div>
-
-        <!-- Chambres disponibles -->
         <div class="row">
 
-            <!-- Chambre 1 - Suite Royale -->
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm rounded" style="border: 1px solid #f5a623; transition: transform 0.3s ease;">
                     <img src="{{ url_for('static', filename='images/s-royale.jpg') }}" class="card-img-top" alt="Suite Royale">

@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.6.22/css/uikit.min.css" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon.webp') }}">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background: linear-gradient(90deg, #FF5733, #FFC300);">
@@ -63,26 +64,23 @@
             </div>
         </div>
     </nav>
-    
-    <!-- {% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
-        <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show" role="alert">
-            {{ messages[0][1] }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+    <div>
+        {% for category, message in messages %}
+        <div class="uk-alert-{{ category }}" uk-alert>
+            <a class="uk-alert-close" uk-close></a>
+            {{ message }}
         </div>
+        {% endfor %}
+    </div>
     {% endif %}
-    {% endwith %} -->
-
-
+    {% endwith %}
 
 <div class="container mt-5 pt-5">
     {% block content %}{% endblock %}
 </div>
-
-
-
 
 <div id="modal-close-default" uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
@@ -176,7 +174,6 @@
             </div>
         </div>
 
-        <!-- Formulaire de connexion -->
         <div id="login-form" style="display: none;">
             <h2 class="text-center mb-4">Connexion</h2>
             <form action="{{ url_for('login') }}" method="POST">

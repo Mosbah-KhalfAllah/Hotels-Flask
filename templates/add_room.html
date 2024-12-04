@@ -1,83 +1,97 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}Ajouter une Chambre - Burj Al Arab{% endblock %}
+{% block title %}Ajouter une Chambre{% endblock %}
 
 {% block content %}
-<!-- Add Room Section -->
-<div class="add-room-section py-5" style="background-color: #f1f1f1;">
-    <div class="container">
-        <h2 class="text-center fw-bold mb-4" style="color: #ff6347;">
-            <i class="fas fa-bed"></i> Ajouter une Chambre
-        </h2>
-        <p class="text-center mb-5" style="font-size: 1.2rem;">Remplissez le formulaire ci-dessous pour ajouter une nouvelle chambre à notre hôtel et offrir une expérience exceptionnelle à nos clients.</p>
+<div class="container mt-5">
+    <h2 class="text-center mb-4" style="color: #ff6347;">
+        <i class="fas fa-bed"></i> Ajouter une Chambre
+    </h2>
 
-        <!-- Add Room Form -->
-        <form method="POST" action="{{ url_for('add_room') }}">
-            <!-- Room Number and Price -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="room_number" class="form-label"><i class="fas fa-hashtag"></i> Numéro de Chambre</label>
-                    <input type="text" class="form-control" id="room_number" name="room_number" required placeholder="Entrez le numéro de la chambre">
-                </div>
-                <div class="col-md-6">
-                    <label for="room_price" class="form-label"><i class="fas fa-credit-card"></i> Prix</label>
-                    <input type="number" class="form-control" id="room_price" name="room_price" required placeholder="Entrez le prix de la chambre">
-                </div>
+    <form method="POST" action="{{ url_for('add_room') }}" class="p-5 shadow-lg rounded" style="background-color: #f9f9f9;">
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="numero" class="form-label"><i class="fas fa-hotel"></i> Numéro de Chambre</label>
+                <input type="text" class="form-control" id="numero" name="numero" required placeholder="Entrez le numéro de la chambre">
             </div>
+            <div class="col-md-6">
+                <label for="type" class="form-label"><i class="fas fa-cogs"></i> Type de Chambre</label>
+                <select class="form-select" id="type" name="type" required>
+                    <option value="suite">Suite Royale</option>
+                    <option value="deluxe">Chambre Deluxe</option>
+                    <option value="standard">Chambre Standard</option>
+                </select>
+            </div>
+        </div>
 
-            <!-- Room Type and Availability -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="room_type" class="form-label"><i class="fas fa-bed"></i> Type de Chambre</label>
-                    <select class="form-select" id="room_type" name="room_type" required>
-                        <option value="suite">Suite Royale</option>
-                        <option value="deluxe">Chambre Deluxe</option>
-                        <option value="standard">Chambre Standard</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label for="availability" class="form-label"><i class="fas fa-check-circle"></i> Disponibilité</label>
-                    <select class="form-select" id="availability" name="availability" required>
-                        <option value="true">Disponible</option>
-                        <option value="false">Indisponible</option>
-                    </select>
-                </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="capacite" class="form-label"><i class="fas fa-users"></i> Capacité</label>
+                <input type="number" class="form-control" id="capacite" name="capacite" required placeholder="Entrez la capacité">
             </div>
+            <div class="col-md-6">
+                <label for="prix" class="form-label"><i class="fas fa-dollar-sign"></i> Prix</label>
+                <input type="number" step="0.01" class="form-control" id="prix" name="prix" required placeholder="Entrez le prix par nuit">
+            </div>
+        </div>
 
-            <!-- Room Capacity and Position -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="room_capacity" class="form-label"><i class="fas fa-users"></i> Capacité</label>
-                    <input type="number" class="form-control" id="room_capacity" name="room_capacity" required placeholder="Nombre maximum de personnes">
-                </div>
-                <div class="col-md-6">
-                    <label for="room_position" class="form-label"><i class="fas fa-location-arrow"></i> Position</label>
-                    <input type="text" class="form-control" id="room_position" name="room_position" placeholder="Emplacement de la chambre (ex: étage 2)">
-                </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="position" class="form-label"><i class="fas fa-map-marker-alt"></i> Position</label>
+                <input type="text" class="form-control" id="position" name="position" placeholder="Entrez la position de la chambre">
             </div>
+            <div class="col-md-6">
+                <label for="description" class="form-label"><i class="fas fa-info-circle"></i> Description</label>
+                <textarea class="form-control" id="description" name="description" placeholder="Entrez une description"></textarea>
+            </div>
+        </div>
 
-            <!-- Caractéristiques Spéciales and Description (side by side) -->
-            <div class="row mb-3">
-                <!-- Caractéristiques Spéciales -->
-                <div class="col-md-6">
-                    <label for="special_features" class="form-label"><i class="fas fa-gift"></i> Caractéristiques Spéciales</label>
-                    <textarea class="form-control" id="special_features" name="special_features" rows="4" placeholder="Exemples: vue sur la mer, jacuzzi"></textarea>
-                </div>
-                <!-- Description -->
-                <div class="col-md-6">
-                    <label for="room_description" class="form-label"><i class="fas fa-info-circle"></i> Description</label>
-                    <textarea class="form-control" id="room_description" name="room_description" rows="4" placeholder="Ajoutez une description de la chambre"></textarea>
-                </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="disponible" class="form-label"><i class="fas fa-check-circle"></i> Disponibilité</label>
+                <select class="form-select" id="disponible" name="disponible">
+                    <option value="1">Disponible</option>
+                    <option value="0">Indisponible</option>
+                </select>
             </div>
+        </div>        
 
-            <!-- Submit Button -->
-            <div class="text-center">
-                <button type="submit" class="btn btn-danger btn-lg">
-                    <i class="fas fa-check-circle"></i> Ajouter la Chambre
-                </button>
-            </div>
-        </form>
-    </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-danger btn-lg">
+                <i class="fas fa-plus-circle"></i> Ajouter la Chambre
+            </button>
+        </div>
+    </form>
 </div>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    form {
+    animation: fadeIn 1s ease-in-out;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #ff6347;
+    box-shadow: 0 0 10px rgba(255, 99, 71, 0.5);
+}
+
+.btn-danger:hover {
+    background-color: #e74c3c;
+    transform: scale(1.05);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+</style>
 
 {% endblock %}
